@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dili.mtms.mapper.TransportOrderItemMapper">
+  <resultMap id="BaseResultMap" type="com.dili.mtms.domain.TransportOrderItem">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="transport_order_id" jdbcType="BIGINT" property="transportOrderId" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+    <result column="weight_type" jdbcType="TINYINT" property="weightType" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="unit_weight" jdbcType="INTEGER" property="unitWeight" />
+    <result column="total_weight" jdbcType="INTEGER" property="totalWeight" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, transport_order_id, goods_name, weight_type, number, unit_weight, total_weight, 
+    create_time
+  </sql>
+  <select id="selectBy" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from transport_order_item
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <update id="updateBy" parameterType="com.dili.mtms.domain.TransportOrderItem">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    update transport_order_item
+    <set>
+      <if test="transportOrderId != null">
+        transport_order_id = #{transportOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsName != null">
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="weightType != null">
+        weight_type = #{weightType,jdbcType=TINYINT},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="unitWeight != null">
+        unit_weight = #{unitWeight,jdbcType=INTEGER},
+      </if>
+      <if test="totalWeight != null">
+        total_weight = #{totalWeight,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

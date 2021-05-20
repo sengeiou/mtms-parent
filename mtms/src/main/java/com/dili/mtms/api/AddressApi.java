@@ -1,35 +1,23 @@
-package com.dili.mtms.controller;
+package com.dili.mtms.api;
 
 import com.dili.mtms.domain.Address;
 import com.dili.mtms.service.AddressService;
 import com.dili.ss.domain.BaseOutput;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 由MyBatis Generator工具自动生成
  * This file was generated on 2021-05-20 17:20:00.
  */
-@Controller
-@RequestMapping("/address")
-public class AddressController {
+@RestController
+@RequestMapping("/api/address")
+public class AddressApi {
     @Autowired
     AddressService addressService;
 
-    /**
-     * 跳转到Address页面
-     * @param modelMap
-     * @return String
-     */
-    @RequestMapping(value="/index.html", method = RequestMethod.GET)
-    public String index(ModelMap modelMap) {
-        return "address/index";
-    }
 
     /**
      * 分页查询Address，返回easyui分页信息
@@ -37,7 +25,7 @@ public class AddressController {
      * @return String
      * @throws Exception
      */
-    @RequestMapping(value="/listPage.action", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping(value="/listPage.action")
     public @ResponseBody String listPage(Address address) throws Exception {
         return addressService.listEasyuiPageByExample(address, true).toString();
     }

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dili.mtms.mapper.TransportOrderMapper">
+  <resultMap id="BaseResultMap" type="com.dili.mtms.domain.TransportOrder">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="shipper_id" jdbcType="BIGINT" property="shipperId" />
+    <result column="shipper_address_id" jdbcType="BIGINT" property="shipperAddressId" />
+    <result column="shipper_name" jdbcType="VARCHAR" property="shipperName" />
+    <result column="shipper_cellphone" jdbcType="VARCHAR" property="shipperCellphone" />
+    <result column="shipper_address" jdbcType="VARCHAR" property="shipperAddress" />
+    <result column="delivery_address_id" jdbcType="VARCHAR" property="deliveryAddressId" />
+    <result column="delivery_name" jdbcType="VARCHAR" property="deliveryName" />
+    <result column="delivery_cellphone" jdbcType="VARCHAR" property="deliveryCellphone" />
+    <result column="delivery_address" jdbcType="VARCHAR" property="deliveryAddress" />
+    <result column="taker_id" jdbcType="BIGINT" property="takerId" />
+    <result column="offer" jdbcType="BIGINT" property="offer" />
+    <result column="firm_id" jdbcType="BIGINT" property="firmId" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="vehicle_type" jdbcType="VARCHAR" property="vehicleType" />
+    <result column="vehicle_number" jdbcType="INTEGER" property="vehicleNumber" />
+    <result column="service_time" jdbcType="TIMESTAMP" property="serviceTime" />
+    <result column="notes" jdbcType="VARCHAR" property="notes" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="cancel_time" jdbcType="TIMESTAMP" property="cancelTime" />
+    <result column="take_time" jdbcType="TIMESTAMP" property="takeTime" />
+    <result column="invalid_time" jdbcType="TIMESTAMP" property="invalidTime" />
+    <result column="complete_time" jdbcType="TIMESTAMP" property="completeTime" />
+    <result column="close_time" jdbcType="TIMESTAMP" property="closeTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, code, shipper_id, shipper_address_id, shipper_name, shipper_cellphone, shipper_address, 
+    delivery_address_id, delivery_name, delivery_cellphone, delivery_address, taker_id, 
+    offer, firm_id, state, vehicle_type, vehicle_number, service_time, notes, create_time, 
+    cancel_time, take_time, invalid_time, complete_time, close_time
+  </sql>
+  <select id="selectBy" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from transport_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <update id="updateBy" parameterType="com.dili.mtms.domain.TransportOrder">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    update transport_order
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperId != null">
+        shipper_id = #{shipperId,jdbcType=BIGINT},
+      </if>
+      <if test="shipperAddressId != null">
+        shipper_address_id = #{shipperAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="shipperName != null">
+        shipper_name = #{shipperName,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperCellphone != null">
+        shipper_cellphone = #{shipperCellphone,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperAddress != null">
+        shipper_address = #{shipperAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryAddressId != null">
+        delivery_address_id = #{deliveryAddressId,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryName != null">
+        delivery_name = #{deliveryName,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryCellphone != null">
+        delivery_cellphone = #{deliveryCellphone,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryAddress != null">
+        delivery_address = #{deliveryAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="takerId != null">
+        taker_id = #{takerId,jdbcType=BIGINT},
+      </if>
+      <if test="offer != null">
+        offer = #{offer,jdbcType=BIGINT},
+      </if>
+      <if test="firmId != null">
+        firm_id = #{firmId,jdbcType=BIGINT},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="vehicleType != null">
+        vehicle_type = #{vehicleType,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleNumber != null">
+        vehicle_number = #{vehicleNumber,jdbcType=INTEGER},
+      </if>
+      <if test="serviceTime != null">
+        service_time = #{serviceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notes != null">
+        notes = #{notes,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cancelTime != null">
+        cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="takeTime != null">
+        take_time = #{takeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invalidTime != null">
+        invalid_time = #{invalidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="completeTime != null">
+        complete_time = #{completeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closeTime != null">
+        close_time = #{closeTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

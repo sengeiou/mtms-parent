@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * 由MyBatis Generator工具自动生成
- * This file was generated on 2021-05-20 17:08:49.
+ * This file was generated on 2021-05-20 17:20:00.
  */
 @Service
 public class AddressServiceImpl extends BaseServiceImpl<Address, Long> implements AddressService {

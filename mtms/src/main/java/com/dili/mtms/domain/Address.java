@@ -14,7 +14,7 @@ import javax.persistence.Id;
 /**
  * 由MyBatis Generator工具自动生成
  * 常用地址
- * This file was generated on 2021-05-20 17:08:49.
+ * This file was generated on 2021-05-20 17:20:00.
  */
 @Table(name = "`address`")
 public interface Address extends IBaseDomain {
