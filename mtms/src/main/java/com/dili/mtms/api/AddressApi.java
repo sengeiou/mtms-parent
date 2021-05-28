@@ -4,13 +4,12 @@ import com.dili.mtms.domain.Address;
 import com.dili.mtms.service.AddressService;
 import com.dili.ss.domain.BaseOutput;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
- * 由MyBatis Generator工具自动生成
- * This file was generated on 2021-05-20 17:20:00.
+ * 地址管理
  */
 @RestController
 @RequestMapping("/api/address")
@@ -26,8 +25,14 @@ public class AddressApi {
      * @throws Exception
      */
     @PostMapping(value="/listPage.action")
-    public @ResponseBody String listPage(Address address) throws Exception {
-        return addressService.listEasyuiPageByExample(address, true).toString();
+    public @ResponseBody BaseOutput listPage(Address address) throws Exception {
+        List list = null;
+        try {
+            list = addressService.listEasyuiPageByExample(address, true).getRows();
+        }catch (Exception e){
+            return BaseOutput.failure();
+        }
+        return BaseOutput.success("查询成功").setData(list);
     }
 
     /**
@@ -35,9 +40,13 @@ public class AddressApi {
      * @param address
      * @return BaseOutput
      */
-    @RequestMapping(value="/insert.action", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping(value="/insert.action")
     public @ResponseBody BaseOutput insert(Address address) {
-        addressService.insertSelective(address);
+        try {
+            addressService.insertSelective(address);
+        }catch (Exception e){
+            return BaseOutput.failure();
+        }
         return BaseOutput.success("新增成功");
     }
 
@@ -46,9 +55,14 @@ public class AddressApi {
      * @param address
      * @return BaseOutput
      */
-    @RequestMapping(value="/update.action", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping(value="/update.action")
     public @ResponseBody BaseOutput update(Address address) {
-        addressService.updateSelective(address);
+        try {
+            addressService.updateSelective(address);
+
+        }catch (Exception e){
+            return BaseOutput.failure();
+        }
         return BaseOutput.success("修改成功");
     }
 
@@ -57,9 +71,13 @@ public class AddressApi {
      * @param id
      * @return BaseOutput
      */
-    @RequestMapping(value="/delete.action", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping(value="/delete.action")
     public @ResponseBody BaseOutput delete(Long id) {
-        addressService.delete(id);
+        try {
+            addressService.delete(id);
+        }catch (Exception e){
+            return BaseOutput.failure();
+        }
         return BaseOutput.success("删除成功");
     }
 }
