@@ -24,7 +24,7 @@ public class AddressApi {
      * @return String
      * @throws Exception
      */
-    @PostMapping(value="/listPage.action")
+    @PostMapping(value="/listPage")
     public @ResponseBody BaseOutput listPage(Address address) throws Exception {
         List list = null;
         try {
@@ -40,7 +40,7 @@ public class AddressApi {
      * @param address
      * @return BaseOutput
      */
-    @PostMapping(value="/insert.action")
+    @PostMapping(value="/insert")
     public @ResponseBody BaseOutput insert(Address address) {
         try {
             addressService.insertSelective(address);
@@ -55,7 +55,7 @@ public class AddressApi {
      * @param address
      * @return BaseOutput
      */
-    @PostMapping(value="/update.action")
+    @PostMapping(value="/update")
     public @ResponseBody BaseOutput update(Address address) {
         try {
             addressService.updateSelective(address);
@@ -71,7 +71,7 @@ public class AddressApi {
      * @param id
      * @return BaseOutput
      */
-    @PostMapping(value="/delete.action")
+    @PostMapping(value="/delete")
     public @ResponseBody BaseOutput delete(Long id) {
         try {
             addressService.delete(id);

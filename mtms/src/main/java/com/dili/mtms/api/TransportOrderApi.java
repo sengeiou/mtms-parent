@@ -22,7 +22,7 @@ public class TransportOrderApi {
      * @return
      * @throws Exception
      */
-    @PostMapping(value="/listPage.action")
+    @PostMapping(value="/listPage")
     public @ResponseBody BaseOutput listPage(TransportOrder transportOrder) throws Exception {
         return BaseOutput.success();
     }
@@ -32,8 +32,48 @@ public class TransportOrderApi {
      * @param transportOrder
      * @return
      */
-    @PostMapping(value="/insert.action")
+    @PostMapping(value="/insert")
     public @ResponseBody BaseOutput insert(TransportOrder transportOrder) {
+        return BaseOutput.success();
+    }
+
+    /**
+     * 订单详情
+     * @param transportOrder
+     * @return
+     */
+    @PostMapping(value="/detail")
+    public @ResponseBody BaseOutput detail(TransportOrder transportOrder) {
+        return BaseOutput.success();
+    }
+
+    /**
+     * 取消订单
+     * @param transportOrder
+     * @return
+     */
+    @PostMapping(value="/cancel")
+    public @ResponseBody BaseOutput cancel(TransportOrder transportOrder) {
+        return BaseOutput.success();
+    }
+
+    /**
+     * 订单完成
+     * @param transportOrder
+     * @return
+     */
+    @PostMapping(value="/complete")
+    public @ResponseBody BaseOutput complete(TransportOrder transportOrder) {
+        return BaseOutput.success();
+    }
+
+    /**
+     * 删除订单
+     * @param transportOrder
+     * @return
+     */
+    @PostMapping(value="/delete")
+    public @ResponseBody BaseOutput delete(TransportOrder transportOrder) {
         return BaseOutput.success();
     }
 }

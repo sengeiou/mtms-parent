@@ -22,7 +22,7 @@ public class LoadingOrderApi {
      * @return
      * @throws Exception
      */
-    @PostMapping(value="/listPage.action")
+    @PostMapping(value="/listPage")
     public @ResponseBody BaseOutput listPage(LoadingOrder loadingOrder) throws Exception {
         return BaseOutput.success();
     }
@@ -32,7 +32,7 @@ public class LoadingOrderApi {
      * @param loadingOrder
      * @return BaseOutput
      */
-    @PostMapping(value="/insert.action")
+    @PostMapping(value="/insert")
     public @ResponseBody BaseOutput insert(LoadingOrder loadingOrder) {
         return BaseOutput.success();
     }

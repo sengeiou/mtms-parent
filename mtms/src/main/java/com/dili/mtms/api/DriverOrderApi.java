@@ -19,7 +19,7 @@ public class DriverOrderApi {
      * @param firmId
      * @return
      */
-    @PostMapping(value="/listPage.action")
+    @PostMapping(value="/listPage")
     public @ResponseBody BaseOutput listPage(Long firmId){
         return BaseOutput.success();
     }
@@ -30,7 +30,7 @@ public class DriverOrderApi {
      * @return
      * @throws Exception
      */
-    @PostMapping(value="/detail.action")
+    @PostMapping(value="/detail")
     public @ResponseBody BaseOutput detail(TransportOrder transportOrder) throws Exception {
         return BaseOutput.success();
     }
