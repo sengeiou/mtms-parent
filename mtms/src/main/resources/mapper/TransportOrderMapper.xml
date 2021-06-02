@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dili.mtms.mapper.TransportOrderMapper">
-  <resultMap id="BaseResultMap" type="com.dili.mtms.domain.TransportOrder">
-    <!--
+
+  <select id="listByQueryParams" parameterType="com.dili.mtms.dto.TransportOrderQuey" resultType="com.dili.mtms.dto.TransportOrderQuey">
+    SELECT
+      s.shipper_name AS shipperName,
+      t.goods_name AS goodsName
+    FROM
+      transport_order s
+        LEFT JOIN transport_order_item t ON s.id = t.transport_order_id
+  </select>
+
+  <!--<resultMap id="BaseResultMap" type="com.dili.mtms.domain.TransportOrder">
+    &lt;!&ndash;
       WARNING - @mbg.generated
-    -->
+    &ndash;&gt;
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="shipper_id" jdbcType="BIGINT" property="shipperId" />
@@ -32,27 +42,27 @@
     <result column="close_time" jdbcType="TIMESTAMP" property="closeTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    <!--
+    &lt;!&ndash;
       WARNING - @mbg.generated
-    -->
-    id, code, shipper_id, shipper_address_id, shipper_name, shipper_cellphone, shipper_address, 
-    delivery_address_id, delivery_name, delivery_cellphone, delivery_address, taker_id, 
-    offer, firm_id, state, vehicle_type, vehicle_number, service_time, notes, create_time, 
+    &ndash;&gt;
+    id, code, shipper_id, shipper_address_id, shipper_name, shipper_cellphone, shipper_address,
+    delivery_address_id, delivery_name, delivery_cellphone, delivery_address, taker_id,
+    offer, firm_id, state, vehicle_type, vehicle_number, service_time, notes, create_time,
     cancel_time, take_time, invalid_time, complete_time, close_time
   </sql>
   <select id="selectBy" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    <!--
+    &lt;!&ndash;
       WARNING - @mbg.generated
-    -->
-    select 
+    &ndash;&gt;
+    select
     <include refid="Base_Column_List" />
     from transport_order
     where id = #{id,jdbcType=BIGINT}
   </select>
   <update id="updateBy" parameterType="com.dili.mtms.domain.TransportOrder">
-    <!--
+    &lt;!&ndash;
       WARNING - @mbg.generated
-    -->
+    &ndash;&gt;
     update transport_order
     <set>
       <if test="code != null">
@@ -129,5 +139,5 @@
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
-  </update>
+  </update>-->
 </mapper>
