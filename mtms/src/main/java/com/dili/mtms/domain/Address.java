@@ -76,6 +76,20 @@ public interface Address extends IBaseDomain {
 
     void setIsDefault(Byte isDefault);
 
+    @Column(name = "`city_id`")
+    @FieldDef(label="省市区id")
+    @EditMode(editor = FieldEditor.Number, required = false)
+    Long getCityId();
+
+    void setCityId(Long cityId);
+
+    @Column(name = "`city_name`")
+    @FieldDef(label="省市区名称", maxLength = 120)
+    @EditMode(editor = FieldEditor.Text, required = false)
+    String getCityName();
+
+    void setCityName(String cityName);
+
     @Column(name = "`create_time`")
     @FieldDef(label="创建时间")
     @EditMode(editor = FieldEditor.Datetime, required = false)

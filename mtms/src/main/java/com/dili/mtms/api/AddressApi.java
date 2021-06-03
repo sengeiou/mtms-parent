@@ -3,6 +3,7 @@ package com.dili.mtms.api;
 import com.dili.mtms.domain.Address;
 import com.dili.mtms.service.AddressService;
 import com.dili.ss.domain.BaseOutput;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/address")
+@Slf4j
 public class AddressApi {
     @Autowired
     AddressService addressService;
@@ -30,6 +32,7 @@ public class AddressApi {
         try {
             list = addressService.listEasyuiPageByExample(address, true).getRows();
         }catch (Exception e){
+            log.error(e.getMessage(),e);
             return BaseOutput.failure();
         }
         return BaseOutput.success("查询成功").setData(list);
@@ -45,6 +48,7 @@ public class AddressApi {
         try {
             addressService.insertSelective(address);
         }catch (Exception e){
+            log.error(e.getMessage(),e);
             return BaseOutput.failure();
         }
         return BaseOutput.success("新增成功");
@@ -61,6 +65,7 @@ public class AddressApi {
             addressService.updateSelective(address);
 
         }catch (Exception e){
+            log.error(e.getMessage(),e);
             return BaseOutput.failure();
         }
         return BaseOutput.success("修改成功");
@@ -76,6 +81,7 @@ public class AddressApi {
         try {
             addressService.delete(id);
         }catch (Exception e){
+            log.error(e.getMessage(),e);
             return BaseOutput.failure();
         }
         return BaseOutput.success("删除成功");

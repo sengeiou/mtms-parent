@@ -1,5 +1,7 @@
 package com.dili.mtms.dto;
 
+import com.dili.mtms.domain.LoadingOrder;
+import com.dili.mtms.domain.LoadingOrderItem;
 import com.dili.mtms.domain.TransportOrder;
 import com.dili.mtms.domain.TransportOrderItem;
 
@@ -9,21 +11,32 @@ import java.util.List;
 /**
  * 运输单dto
  */
-public interface TransportOrderQuey extends TransportOrder {
+public interface LoadingOrderQuey extends LoadingOrder {
+
     String getOrderItem();
     void setOrderItem(String orderItem);
 
     /**
-     * 运输单项
+     * 装卸单项
      * @return
      */
+    List<LoadingOrderItem> getLoadingItem();
+    void setLoadingItem(List<LoadingOrderItem> loadingItem);
+
+   /* String getOrderItem();
+    void setOrderItem(String orderItem);
+
+    *//**
+     * 运输单项
+     * @return
+     *//*
     List<TransportOrderItem> getTransportItem();
     void setTransportItem(List<TransportOrderItem> transportItem);
 
-    /**
+    *//**
      * 订单时间查询区间
      * @return
-     */
+     *//*
     String getOrderTime();
     void setOrderTime(String orderTime);
 
@@ -33,10 +46,10 @@ public interface TransportOrderQuey extends TransportOrder {
     Date getOrderEndTime();
     void setOrderEndTime(Date orderEndTime);
 
-    /**
+    *//**
      * 服务时间查询区间
      * @return
-     */
+     *//*
     String getServeTime();
     void setServeTime(String serveTime);
 
@@ -44,6 +57,6 @@ public interface TransportOrderQuey extends TransportOrder {
     void setServiceStartTime(Date serviceStartTime);
 
     Date getServiceEndTime();
-    void setServiceEndTime(Date serviceEndTime);
+    void setServiceEndTime(Date serviceEndTime);*/
 
 }

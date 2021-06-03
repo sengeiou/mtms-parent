@@ -2,142 +2,192 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dili.mtms.mapper.TransportOrderMapper">
 
-  <select id="listByQueryParams" parameterType="com.dili.mtms.dto.TransportOrderQuey" resultType="com.dili.mtms.dto.TransportOrderQuey">
+    <delete id="deleteTransporOrderItem">
+        delete from transport_order_item where transport_order_id = #{id}
+    </delete>
+
+    <delete id="deleteTransporOrder">
+        delete from transport_order where id = #{id}
+    </delete>
+
+    <!--买卖端运输详情 -->
+    <select id="transportDetail" parameterType="java.lang.Long" resultMap="TransportDetail">
+        SELECT
+            s.id,
+            s.shipper_name,
+            s.shipper_cellphone,
+            s.shipper_address,
+            s.delivery_name,
+            s.delivery_cellphone,
+            s.delivery_address,
+            s.vehicle_type,
+            s.vehicle_number,
+            s.service_time,
+            s.notes,
+            s.code,
+            s.offer,
+            s.state,
+            s.taker_name,
+            s.taker_cellphone,
+            s.take_time,
+            s.create_time,
+            t.item_id,
+            t.unit_weight,
+            t.number,
+            t.goods_name,
+            t.total_weight
+        FROM
+            transport_order s left join transport_order_item t on s.id = t.transport_order_id
+        where
+            s.id = #{id}
+    </select>
+    <resultMap id="TransportDetail" type="com.dili.mtms.dto.TransportOrderQuey">
+        <id column="id" property="id"/>
+        <result column="shipper_name" property="shipperName"/>
+        <result column="shipper_cellphone" property="shipperCellphone"/>
+        <result column="shipper_address" property="shipperAddress"/>
+        <result column="delivery_name" property="deliveryName"/>
+        <result column="delivery_cellphone" property="deliveryCellphone"/>
+        <result column="delivery_address" property="deliveryAddress"/>
+        <result column="vehicle_type" property="vehicleType"/>
+        <result column="vehicle_number" property="vehicleNumber"/>
+        <result column="service_time" property="serviceTime"/>
+        <result column="notes" property="notes"/>
+        <result column="code" property="code"/>
+        <result column="offer" property="offer"/>
+        <result column="state" property="state"/>
+        <result column="taker_name" property="takerName"/>
+        <result column="taker_cellphone" property="takerCellphone"/>
+        <result column="take_time" property="takeTime"/>
+        <result column="create_time" property="createTime"/>
+
+        <collection property="transportItem" ofType="com.dili.mtms.domain.TransportOrderItem"  >
+            <id column="item_id" property="itemId"/>
+            <result column="goods_name" property="goodsName"/>
+            <result column="unit_weight" property="unitWeight"/>
+            <result column="number" property="number"/>
+            <result column="total_weight" property="totalWeight"/>
+        </collection>
+    </resultMap>
+
+  <!--买卖端新增运输单项 -->
+  <insert id="insertTransportItem">
+     insert into transport_order_item(transport_order_id,goods_name,weight_type,total_weight,create_time) values
+      <foreach collection="list" item="item" index="index" separator=",">
+        (#{id},#{item.goodsName},#{item.weightType},#{item.totalWeight},now())
+      </foreach>
+  </insert>
+
+  <!--买卖端新增运输单 -->
+  <insert id="insertTransport" useGeneratedKeys="true" keyProperty="id"
+          parameterType="com.dili.mtms.dto.TransportOrderQuey">
+     insert into transport_order(shipper_name,
+                                 shipper_cellphone,
+                                 shipper_address,
+                                 delivery_name,
+                                 delivery_cellphone,
+                                 delivery_address,
+                                 vehicle_type,
+                                 vehicle_number,
+                                 service_time,
+                                 offer,
+                                 firm_id,
+                                 state,
+                                 notes,
+                                 create_time
+     ) values (#{shipperName},
+               #{shipperCellphone},
+               #{shipperAddress},
+               #{deliveryName},
+               #{deliveryCellphone},
+               #{deliveryAddress},
+               #{vehicleType},
+               #{vehicleNumber},
+               #{serviceTime},
+               #{offer},
+               #{firmId},
+               #{state},
+               #{notes},
+               now()
+               )
+  </insert>
+  <!--买卖端运输单列表 -->
+  <select id="transportList" parameterType="com.dili.mtms.domain.TransportOrder" resultMap="Transport">
     SELECT
-      s.shipper_name AS shipperName,
-      t.goods_name AS goodsName
+      s.id,
+      s.state,
+      s.shipper_address,
+      s.delivery_address,
+      s.offer,
+      s.create_time,
+      t.goods_name,
+      t.total_weight
     FROM
-      transport_order s
-        LEFT JOIN transport_order_item t ON s.id = t.transport_order_id
+      transport_order s left join transport_order_item t on s.id = t.transport_order_id
+    where
+      s.firm_id = #{firmId}
   </select>
 
-  <!--<resultMap id="BaseResultMap" type="com.dili.mtms.domain.TransportOrder">
-    &lt;!&ndash;
-      WARNING - @mbg.generated
-    &ndash;&gt;
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="code" jdbcType="VARCHAR" property="code" />
-    <result column="shipper_id" jdbcType="BIGINT" property="shipperId" />
-    <result column="shipper_address_id" jdbcType="BIGINT" property="shipperAddressId" />
-    <result column="shipper_name" jdbcType="VARCHAR" property="shipperName" />
-    <result column="shipper_cellphone" jdbcType="VARCHAR" property="shipperCellphone" />
-    <result column="shipper_address" jdbcType="VARCHAR" property="shipperAddress" />
-    <result column="delivery_address_id" jdbcType="VARCHAR" property="deliveryAddressId" />
-    <result column="delivery_name" jdbcType="VARCHAR" property="deliveryName" />
-    <result column="delivery_cellphone" jdbcType="VARCHAR" property="deliveryCellphone" />
-    <result column="delivery_address" jdbcType="VARCHAR" property="deliveryAddress" />
-    <result column="taker_id" jdbcType="BIGINT" property="takerId" />
-    <result column="offer" jdbcType="BIGINT" property="offer" />
-    <result column="firm_id" jdbcType="BIGINT" property="firmId" />
-    <result column="state" jdbcType="TINYINT" property="state" />
-    <result column="vehicle_type" jdbcType="VARCHAR" property="vehicleType" />
-    <result column="vehicle_number" jdbcType="INTEGER" property="vehicleNumber" />
-    <result column="service_time" jdbcType="TIMESTAMP" property="serviceTime" />
-    <result column="notes" jdbcType="VARCHAR" property="notes" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="cancel_time" jdbcType="TIMESTAMP" property="cancelTime" />
-    <result column="take_time" jdbcType="TIMESTAMP" property="takeTime" />
-    <result column="invalid_time" jdbcType="TIMESTAMP" property="invalidTime" />
-    <result column="complete_time" jdbcType="TIMESTAMP" property="completeTime" />
-    <result column="close_time" jdbcType="TIMESTAMP" property="closeTime" />
+  <resultMap id="Transport" type="com.dili.mtms.dto.TransportOrderQuey">
+    <id column="id" property="id"/>
+    <result column="state" property="state"/>
+    <result column="shipper_address" property="shipperAddress"/>
+    <result column="delivery_address" property="deliveryAddress"/>
+    <result column="offer" property="offer"/>
+    <result column="create_time" property="createTime"/>
+
+    <collection property="transportItem" ofType="com.dili.mtms.domain.TransportOrderItem"  >
+<!--      <id column="item_id" property="itemId"/>-->
+      <result column="goods_name" property="goodsName"/>
+      <result column="total_weight" property="totalWeight"/>
+    </collection>
   </resultMap>
-  <sql id="Base_Column_List">
-    &lt;!&ndash;
-      WARNING - @mbg.generated
-    &ndash;&gt;
-    id, code, shipper_id, shipper_address_id, shipper_name, shipper_cellphone, shipper_address,
-    delivery_address_id, delivery_name, delivery_cellphone, delivery_address, taker_id,
-    offer, firm_id, state, vehicle_type, vehicle_number, service_time, notes, create_time,
-    cancel_time, take_time, invalid_time, complete_time, close_time
-  </sql>
-  <select id="selectBy" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    &lt;!&ndash;
-      WARNING - @mbg.generated
-    &ndash;&gt;
-    select
-    <include refid="Base_Column_List" />
-    from transport_order
-    where id = #{id,jdbcType=BIGINT}
+
+  <!--PC运输单列表 -->
+  <select id="listByQueryParams" parameterType="com.dili.mtms.dto.TransportOrderQuey" resultType="com.dili.mtms.dto.TransportOrderQuey">
+    SELECT
+      s.id AS id,
+      s.code AS code,
+      s.shipper_name AS shipperName,
+      s.shipper_cellphone AS shipperCellphone,
+      s.delivery_name AS deliveryName,
+      s.delivery_cellphone AS deliveryCellphone,
+      s.offer AS offer,
+      s.state AS state,
+      s.vehicle_type AS vehicleType,
+      s.service_time AS serviceTime,
+      s.notes AS notes,
+      s.create_time AS createTime
+    FROM
+      transport_order s
+    where
+      s.firm_id = #{firmId}
+    <if test="state != 0">
+      AND s.state = #{state}
+    </if>
+
+    <if test="shipperName != null">
+      AND s.shipper_name like '%${shipperName}%'
+    </if>
+
+    <if test="orderTime != null">
+      AND s.create_time <![CDATA[>]]> #{orderStartTime} AND s.s.create_time <![CDATA[<]]> #{orderEndTime}
+    </if>
+
+    <if test="serveTime != null">
+      AND s.service_time <![CDATA[>]]> #{serviceStartTime} AND s.s.service_time <![CDATA[<]]> #{serviceEndTime}
+    </if>
+
   </select>
-  <update id="updateBy" parameterType="com.dili.mtms.domain.TransportOrder">
-    &lt;!&ndash;
-      WARNING - @mbg.generated
-    &ndash;&gt;
-    update transport_order
-    <set>
-      <if test="code != null">
-        code = #{code,jdbcType=VARCHAR},
-      </if>
-      <if test="shipperId != null">
-        shipper_id = #{shipperId,jdbcType=BIGINT},
-      </if>
-      <if test="shipperAddressId != null">
-        shipper_address_id = #{shipperAddressId,jdbcType=BIGINT},
-      </if>
-      <if test="shipperName != null">
-        shipper_name = #{shipperName,jdbcType=VARCHAR},
-      </if>
-      <if test="shipperCellphone != null">
-        shipper_cellphone = #{shipperCellphone,jdbcType=VARCHAR},
-      </if>
-      <if test="shipperAddress != null">
-        shipper_address = #{shipperAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="deliveryAddressId != null">
-        delivery_address_id = #{deliveryAddressId,jdbcType=VARCHAR},
-      </if>
-      <if test="deliveryName != null">
-        delivery_name = #{deliveryName,jdbcType=VARCHAR},
-      </if>
-      <if test="deliveryCellphone != null">
-        delivery_cellphone = #{deliveryCellphone,jdbcType=VARCHAR},
-      </if>
-      <if test="deliveryAddress != null">
-        delivery_address = #{deliveryAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="takerId != null">
-        taker_id = #{takerId,jdbcType=BIGINT},
-      </if>
-      <if test="offer != null">
-        offer = #{offer,jdbcType=BIGINT},
-      </if>
-      <if test="firmId != null">
-        firm_id = #{firmId,jdbcType=BIGINT},
-      </if>
-      <if test="state != null">
-        state = #{state,jdbcType=TINYINT},
-      </if>
-      <if test="vehicleType != null">
-        vehicle_type = #{vehicleType,jdbcType=VARCHAR},
-      </if>
-      <if test="vehicleNumber != null">
-        vehicle_number = #{vehicleNumber,jdbcType=INTEGER},
-      </if>
-      <if test="serviceTime != null">
-        service_time = #{serviceTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="notes != null">
-        notes = #{notes,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="cancelTime != null">
-        cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="takeTime != null">
-        take_time = #{takeTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="invalidTime != null">
-        invalid_time = #{invalidTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="completeTime != null">
-        complete_time = #{completeTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="closeTime != null">
-        close_time = #{closeTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>-->
+  
+  <!--<resultMap id="Transport" type="com.dili.mtms.dto.TransportOrderQuey">
+    <id column="id" property="id"/>
+    <result column="shipper_name" property="shipperName"/>
+
+    <collection property="transportItem" ofType="com.dili.mtms.domain.TransportOrderItem"  >
+      <id column="id" property="id"/>
+      <result column="goods_name" property="goodsName"/>
+    </collection>
+  </resultMap>-->
+
 </mapper>

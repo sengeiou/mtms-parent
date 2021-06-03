@@ -20,7 +20,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan(basePackages = {"com.dili.mtms.mapper", "com.dili.ss.dao"})
 @ComponentScan(basePackages={"com.dili.ss", "com.dili.uap.sdk","com.dili.mtms"})
 @RestfulScan({"com.dili.mtms.rpc", "com.dili.uap.sdk.rpc"})
-@DTOScan(value={"com.dili.ss", "com.dili.uap.sdk.domain", "com.dili.mtms.domain"})
+@DTOScan(value={"com.dili.ss", "com.dili.uap.sdk.domain", "com.dili.mtms.domain","com.dili.mtms.dto"})
 @EnableDiscoveryClient
 @EnableFeignClients
 public class Application extends SpringBootServletInitializer {

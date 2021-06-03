@@ -15,9 +15,8 @@ public class DateTimeUtil {
      * @return
      */
     public static Date startTimeConversion(String time) throws ParseException {
-        String startTime = time+" 00:00:00";
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = sf.parse(startTime);
+        Date date = sf.parse(time);
         return date;
     }
 
@@ -27,9 +26,8 @@ public class DateTimeUtil {
      * @return
      */
     public static Date endTimeConversion(String time) throws ParseException {
-        String endTime = time+"23:59:59";
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = sf.parse(endTime);
+        Date date = sf.parse(time);
         return date;
     }
 

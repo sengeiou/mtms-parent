@@ -1,108 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dili.mtms.mapper.LoadingOrderMapper">
-  <resultMap id="BaseResultMap" type="com.dili.mtms.domain.LoadingOrder">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="code" jdbcType="VARCHAR" property="code" />
-    <result column="shipper_id" jdbcType="BIGINT" property="shipperId" />
-    <result column="shipper_name" jdbcType="VARCHAR" property="shipperName" />
-    <result column="shipper_cellphone" jdbcType="VARCHAR" property="shipperCellphone" />
-    <result column="taker_id" jdbcType="BIGINT" property="takerId" />
-    <result column="offer" jdbcType="BIGINT" property="offer" />
-    <result column="firm_id" jdbcType="BIGINT" property="firmId" />
-    <result column="state" jdbcType="TINYINT" property="state" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="service_time" jdbcType="TIMESTAMP" property="serviceTime" />
-    <result column="service_type" jdbcType="TINYINT" property="serviceType" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="cancel_time" jdbcType="TIMESTAMP" property="cancelTime" />
-    <result column="take_time" jdbcType="TIMESTAMP" property="takeTime" />
-    <result column="invalid_time" jdbcType="TIMESTAMP" property="invalidTime" />
-    <result column="complete_time" jdbcType="TIMESTAMP" property="completeTime" />
-    <result column="close_time" jdbcType="TIMESTAMP" property="closeTime" />
-    <result column="notes" jdbcType="VARCHAR" property="notes" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    id, code, shipper_id, shipper_name, shipper_cellphone, taker_id, offer, firm_id, 
-    state, address, service_time, service_type, create_time, cancel_time, take_time, 
-    invalid_time, complete_time, close_time, notes
-  </sql>
-  <select id="selectBy" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    select 
-    <include refid="Base_Column_List" />
-    from loading_order
-    where id = #{id,jdbcType=BIGINT}
+
+    <delete id="deleteLoadingOrderItem">
+        delete from loading_order_item where loading_order_id = #{id}
+    </delete>
+
+    <delete id="deleteLoadingOrder">
+        delete from loading_order where id = #{id}
+    </delete>
+
+    <!-- 装卸单-详情-->
+    <select id="loadingDetail" parameterType="java.lang.Long" resultMap="LoadingDetail">
+        SELECT
+            s.id,
+            s.code,
+            s.shipper_name,
+            s.shipper_cellphone,
+            s.taker_name,
+            s.taker_cellphone,
+            s.offer,
+            s.state,
+            s.address,
+            s.service_time,
+            s.service_type,
+            s.create_time,
+            s.take_time,
+            s.notes,
+            t.goods_name,
+            t.number,
+            t.unit_weight,
+            t.total_weight
+        FROM
+            loading_order s left join loading_order_item t on s.id = t.loading_order_id
+        where
+            s.id = #{id}
+    </select>
+    <resultMap id="LoadingDetail" type="com.dili.mtms.dto.LoadingOrderQuey">
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="shipper_name" property="shipperName"/>
+        <result column="shipper_cellphone" property="shipperCellphone"/>
+        <result column="taker_name" property="takerName"/>
+        <result column="taker_cellphone" property="takerCellphone"/>
+        <result column="offer" property="offer"/>
+        <result column="state" property="state"/>
+        <result column="address" property="address"/>
+        <result column="service_time" property="serviceTime"/>
+        <result column="service_type" property="serviceType"/>
+        <result column="create_time" property="createTime"/>
+        <result column="take_time" property="takeTime"/>
+        <result column="notes" property="notes"/>
+
+        <collection property="loadingItem" ofType="com.dili.mtms.domain.LoadingOrderItem"  >
+            <result column="goods_name" property="goodsName"/>
+            <result column="unit_weight" property="unitWeight"/>
+            <result column="number" property="number"/>
+            <result column="total_weight" property="totalWeight"/>
+        </collection>
+    </resultMap>
+
+    <!-- 买卖端-装卸-新增item-->
+    <insert id="insertLoadingItem">
+        insert into loading_order_item(loading_order_id,goods_name,weight_type,number,unit_weight,total_weight,create_time) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{id},#{item.goodsName},#{item.weightType},#{item.number},#{item.unitWeight},#{item.totalWeight},now())
+        </foreach>
+    </insert>
+
+    <!-- 买卖端-装卸-新增loading-->
+    <insert id="insertLoading" useGeneratedKeys="true" keyProperty="id" parameterType="com.dili.mtms.dto.LoadingOrderQuey">
+        insert into loading_order(shipper_name,
+                                  shipper_cellphone,
+                                  address,
+                                  service_type,
+                                  service_time,
+                                  offer,
+                                  notes,
+                                  firm_id,
+                                  code,
+                                  state,
+                                  create_time
+        ) values (#{shipperName},
+                  #{shipperCellphone},
+                  #{address},
+                  #{serviceType},
+                  #{serviceTime},
+                  #{offer},
+                  #{notes},
+                  #{firmId},
+                  #{code},
+                  #{state},
+                  now()
+                 )
+    </insert>
+  <!-- 买卖端-装卸-列表-->
+  <select id="loadingList" parameterType="com.dili.mtms.domain.LoadingOrder" resultMap="LoadingOrder">
+       select
+              l.id,
+              l.address,
+              l.state,
+              l.create_time,
+              i.goods_name,
+              i.total_weight
+       from loading_order l left join loading_order_item i on l.id = i.loading_order_id
+       where l.firm_id = #{firmId}
   </select>
-  <update id="updateBy" parameterType="com.dili.mtms.domain.LoadingOrder">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    update loading_order
-    <set>
-      <if test="code != null">
-        code = #{code,jdbcType=VARCHAR},
-      </if>
-      <if test="shipperId != null">
-        shipper_id = #{shipperId,jdbcType=BIGINT},
-      </if>
-      <if test="shipperName != null">
-        shipper_name = #{shipperName,jdbcType=VARCHAR},
-      </if>
-      <if test="shipperCellphone != null">
-        shipper_cellphone = #{shipperCellphone,jdbcType=VARCHAR},
-      </if>
-      <if test="takerId != null">
-        taker_id = #{takerId,jdbcType=BIGINT},
-      </if>
-      <if test="offer != null">
-        offer = #{offer,jdbcType=BIGINT},
-      </if>
-      <if test="firmId != null">
-        firm_id = #{firmId,jdbcType=BIGINT},
-      </if>
-      <if test="state != null">
-        state = #{state,jdbcType=TINYINT},
-      </if>
-      <if test="address != null">
-        address = #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="serviceTime != null">
-        service_time = #{serviceTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="serviceType != null">
-        service_type = #{serviceType,jdbcType=TINYINT},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="cancelTime != null">
-        cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="takeTime != null">
-        take_time = #{takeTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="invalidTime != null">
-        invalid_time = #{invalidTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="completeTime != null">
-        complete_time = #{completeTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="closeTime != null">
-        close_time = #{closeTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="notes != null">
-        notes = #{notes,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+  <resultMap id="LoadingOrder" type="com.dili.mtms.dto.LoadingOrderQuey">
+    <id column="id" property="id"/>
+    <result column="address" property="address"/>
+    <result column="state" property="state"/>
+    <result column="create_time" property="createTime"/>
+
+    <collection property="loadingItem" ofType="com.dili.mtms.domain.LoadingOrderItem"  >
+     <!-- <id column="item_id" property="itemId"/>-->
+      <result column="goods_name" property="goodsName"/>
+      <result column="total_weight" property="totalWeight"/>
+    </collection>
+  </resultMap>
 </mapper>
