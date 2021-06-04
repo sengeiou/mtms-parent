@@ -3,6 +3,7 @@ package com.dili.mtms.api;
 import com.dili.mtms.domain.LoadingOrder;
 import com.dili.mtms.dto.BaseData;
 import com.dili.mtms.dto.LoadingOrderQuey;
+import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.mtms.service.LoadingOrderService;
 import com.dili.ss.domain.BaseOutput;
 import com.dili.uid.sdk.rpc.feign.UidFeignRpc;
@@ -31,7 +32,7 @@ public class LoadingOrderApi {
      * @throws Exception
      */
     @PostMapping(value="/listPage")
-    public @ResponseBody BaseOutput loadingList(LoadingOrder loadingOrder) {
+    public @ResponseBody BaseOutput loadingList(LoadingOrderQuey loadingOrder) {
         BaseData data = null;
         try {
             data = loadingOrderService.loadingList(loadingOrder);
@@ -41,6 +42,24 @@ public class LoadingOrderApi {
         }
         return BaseOutput.success().setData(data);
     }
+
+    /**
+     * 装卸单详情
+     * @param order
+     * @return
+     */
+    @PostMapping(value = "/detail")
+    public @ResponseBody BaseOutput loadingDetail(LoadingOrderQuey order) {
+        LoadingOrderQuey detailInfo = null;
+        try {
+            detailInfo = loadingOrderService.loadingDetail(order);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return BaseOutput.failure();
+        }
+        return BaseOutput.success().setData(detailInfo);
+    }
+
 
     /**
      * 新增LoadingOrder

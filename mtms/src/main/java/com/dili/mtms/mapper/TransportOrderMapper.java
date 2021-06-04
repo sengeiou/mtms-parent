@@ -12,7 +12,7 @@ public interface TransportOrderMapper extends MyMapper<TransportOrder> {
 
     List<TransportOrderQuey> listByQueryParams(TransportOrderQuey quey);
 
-    List<TransportOrderQuey> transportList(TransportOrder order);
+    List<TransportOrderQuey> transportList(TransportOrderQuey order);
 
     int insertTransport(TransportOrderQuey order);
 

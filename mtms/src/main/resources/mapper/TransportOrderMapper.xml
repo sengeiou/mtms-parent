@@ -34,6 +34,7 @@
             t.unit_weight,
             t.number,
             t.goods_name,
+            t.weight_type,
             t.total_weight
         FROM
             transport_order s left join transport_order_item t on s.id = t.transport_order_id
@@ -65,6 +66,7 @@
             <result column="goods_name" property="goodsName"/>
             <result column="unit_weight" property="unitWeight"/>
             <result column="number" property="number"/>
+            <result column="weight_type" property="weightType"/>
             <result column="total_weight" property="totalWeight"/>
         </collection>
     </resultMap>
@@ -111,13 +113,15 @@
                )
   </insert>
   <!--买卖端运输单列表 -->
-  <select id="transportList" parameterType="com.dili.mtms.domain.TransportOrder" resultMap="Transport">
+  <select id="transportList" parameterType="com.dili.mtms.dto.TransportOrderQuey" resultMap="Transport">
     SELECT
       s.id,
       s.state,
       s.shipper_address,
+      s.shipper_cellphone,
       s.delivery_address,
       s.offer,
+      s.service_time,
       s.create_time,
       t.goods_name,
       t.total_weight
@@ -125,14 +129,23 @@
       transport_order s left join transport_order_item t on s.id = t.transport_order_id
     where
       s.firm_id = #{firmId}
+      <if test="status != null and status == 1 ">
+          AND s.state = 1
+      </if>
+
+      <if test="status != null and status == 2 ">
+          AND s.state = 2 or s.state = 3
+      </if>
   </select>
 
   <resultMap id="Transport" type="com.dili.mtms.dto.TransportOrderQuey">
     <id column="id" property="id"/>
     <result column="state" property="state"/>
     <result column="shipper_address" property="shipperAddress"/>
+    <result column="shipper_cellphone" property="shipperCellphone"/>
     <result column="delivery_address" property="deliveryAddress"/>
     <result column="offer" property="offer"/>
+    <result column="service_time" property="serviceTime"/>
     <result column="create_time" property="createTime"/>
 
     <collection property="transportItem" ofType="com.dili.mtms.domain.TransportOrderItem"  >

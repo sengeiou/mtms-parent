@@ -15,7 +15,7 @@ public interface LoadingOrderService extends BaseService<LoadingOrder, Long> {
      * @param loadingOrder
      * @return
      */
-    BaseData loadingList(LoadingOrder loadingOrder) throws Exception;
+    BaseData loadingList(LoadingOrderQuey loadingOrder) throws Exception;
 
     /**
      * 买卖端-装卸-新增
@@ -31,4 +31,11 @@ public interface LoadingOrderService extends BaseService<LoadingOrder, Long> {
      * @throws Exception
      */
     void deleteLoadingOrder(Long id)throws Exception;
+
+    /**
+     * 买卖端-装卸-订单详情
+     * @param order
+     * @return
+     */
+    LoadingOrderQuey loadingDetail(LoadingOrderQuey order)throws Exception;
 }

@@ -29,6 +29,7 @@
             s.notes,
             t.goods_name,
             t.number,
+            t.weight_type,
             t.unit_weight,
             t.total_weight
         FROM
@@ -54,8 +55,9 @@
 
         <collection property="loadingItem" ofType="com.dili.mtms.domain.LoadingOrderItem"  >
             <result column="goods_name" property="goodsName"/>
-            <result column="unit_weight" property="unitWeight"/>
             <result column="number" property="number"/>
+            <result column="weight_type" property="weightType"/>
+            <result column="unit_weight" property="unitWeight"/>
             <result column="total_weight" property="totalWeight"/>
         </collection>
     </resultMap>
@@ -95,21 +97,32 @@
                  )
     </insert>
   <!-- 买卖端-装卸-列表-->
-  <select id="loadingList" parameterType="com.dili.mtms.domain.LoadingOrder" resultMap="LoadingOrder">
+  <select id="loadingList" parameterType="com.dili.mtms.dto.LoadingOrderQuey" resultMap="LoadingOrder">
        select
               l.id,
               l.address,
               l.state,
+              l.shipper_cellphone,
+              l.service_time,
               l.create_time,
               i.goods_name,
               i.total_weight
        from loading_order l left join loading_order_item i on l.id = i.loading_order_id
        where l.firm_id = #{firmId}
+      <if test="status != null and status == 1 ">
+          AND s.state = 1
+      </if>
+
+      <if test="status != null and status == 2 ">
+          AND s.state = 2 or s.state = 3
+      </if>
   </select>
   <resultMap id="LoadingOrder" type="com.dili.mtms.dto.LoadingOrderQuey">
     <id column="id" property="id"/>
     <result column="address" property="address"/>
     <result column="state" property="state"/>
+    <result column="shipper_cellphone" property="shipperCellphone"/>
+    <result column="service_time" property="serviceTime"/>
     <result column="create_time" property="createTime"/>
 
     <collection property="loadingItem" ofType="com.dili.mtms.domain.LoadingOrderItem"  >

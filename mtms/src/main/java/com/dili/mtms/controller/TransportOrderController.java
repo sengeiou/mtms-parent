@@ -30,7 +30,7 @@ public class TransportOrderController {
      * @return
      * @throws Exception
      */
-    @PostMapping(value="/listPage.action")
+    @PostMapping(value="/listPage")
     public @ResponseBody BaseOutput listByQueryParams(TransportOrderQuey quey) {
         BaseData data = null;
         try {

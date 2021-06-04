@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface LoadingOrderMapper extends MyMapper<LoadingOrder> {
 
-    List<LoadingOrderQuey> loadingList(LoadingOrder order);
+    List<LoadingOrderQuey> loadingList(LoadingOrderQuey order);
 
     int insertLoading(LoadingOrderQuey order);
 

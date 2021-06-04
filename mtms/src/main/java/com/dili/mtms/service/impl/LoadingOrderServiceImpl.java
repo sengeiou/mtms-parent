@@ -38,7 +38,7 @@ public class LoadingOrderServiceImpl extends BaseServiceImpl<LoadingOrder, Long>
      * @throws Exception
      */
     @Override
-    public BaseData loadingList(LoadingOrder order) throws Exception {
+    public BaseData loadingList(LoadingOrderQuey order) throws Exception {
         //分页处理
         int page = order.getPage()==null ? 1 : order.getPage();
         int rows = order.getRows()==null ? 10 : order.getRows();
@@ -77,5 +77,16 @@ public class LoadingOrderServiceImpl extends BaseServiceImpl<LoadingOrder, Long>
     public void deleteLoadingOrder(Long id) throws Exception {
         loadingOrderMapper.deleteLoadingOrder(id);
         loadingOrderMapper.deleteLoadingOrderItem(id);
+    }
+
+    /**
+     * 买卖端-装卸-订单详情
+     * @param order
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public LoadingOrderQuey loadingDetail(LoadingOrderQuey order) throws Exception {
+        return loadingOrderMapper.loadingDetail(order.getId());
     }
 }

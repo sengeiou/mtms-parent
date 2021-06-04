@@ -26,7 +26,7 @@ public interface TransportOrderService extends BaseService<TransportOrder, Long>
      * @param order
      * @return
      */
-    BaseData transportList(TransportOrder order) throws Exception;
+    BaseData transportList(TransportOrderQuey order) throws Exception;
 
     /**
      * 买卖端新增运输单

@@ -11,12 +11,25 @@ import java.util.List;
  */
 public interface TransportOrderQuey extends TransportOrder {
 
+
+    Integer getStatus();
+    void setStatus(Integer status);
+
+
+    /**
+     * pc端关键字查询
+     * @return
+     */
     String getKeyword();
     void setKeyword(String keyword);
 
     String getKeyvalue();
     void setKeyvalue(String keyvalue);
 
+    /**
+     * 批量新增单项
+     * @return
+     */
     String getOrderItem();
     void setOrderItem(String orderItem);
 

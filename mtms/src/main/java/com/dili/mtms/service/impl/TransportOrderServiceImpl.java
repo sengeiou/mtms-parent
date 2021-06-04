@@ -57,7 +57,7 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
      * @return
      */
     @Override
-    public BaseData transportList(TransportOrder order) throws Exception{
+    public BaseData transportList(TransportOrderQuey order) throws Exception{
         //分页处理
         int page = order.getPage()==null ? 1 : order.getPage();
         int rows = order.getRows()==null ? 10 : order.getRows();

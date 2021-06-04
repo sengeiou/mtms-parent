@@ -13,6 +13,18 @@ import java.util.List;
  */
 public interface LoadingOrderQuey extends LoadingOrder {
 
+    /**
+     * 司机端查询状态
+     * @return
+     */
+    Integer getStatus();
+    void setStatus(Integer status);
+
+
+    /**
+     * 批量新增单项
+     * @return
+     */
     String getOrderItem();
     void setOrderItem(String orderItem);
 
