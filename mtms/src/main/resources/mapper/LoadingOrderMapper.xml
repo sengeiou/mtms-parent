@@ -3,7 +3,6 @@
 <mapper namespace="com.dili.mtms.mapper.LoadingOrderMapper">
 
     <!-- pc装卸列表-->
-    <!--PC运输单列表 -->
     <select id="listByQueryParams" parameterType="com.dili.mtms.dto.LoadingOrderQuey" resultType="com.dili.mtms.dto.LoadingOrderQuey">
         SELECT
         s.id AS id,

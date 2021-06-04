@@ -72,6 +72,8 @@ public class TransportOrderController {
                 case CfgContent.SHIPPER_CELLPHONE:
                     quey.setShipperCellphone(quey.getKeyvalue());
                     break;
+                default:
+                    return quey;
             }
         }
         return quey;

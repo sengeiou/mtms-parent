@@ -28,7 +28,11 @@ public class LoadingOrderController {
     @Autowired
     LoadingOrderService loadingOrderService;
 
-
+    /**
+     * pc 装卸 列表
+     * @param quey
+     * @return
+     */
     @PostMapping(value="/listPage.action")
     public @ResponseBody BaseOutput listByQueryParams(LoadingOrderQuey quey){
         BaseData data = null;
@@ -82,6 +86,8 @@ public class LoadingOrderController {
                 case CfgContent.SHIPPER_CELLPHONE:
                     quey.setShipperCellphone(quey.getKeyvalue());
                     break;
+                default:
+                    return quey;
             }
         }
         return quey;
