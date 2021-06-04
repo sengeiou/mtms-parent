@@ -10,6 +10,8 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.client.RestTemplate;
 import tk.mybatis.spring.annotation.MapperScan;
 
@@ -23,6 +25,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @DTOScan(value={"com.dili.ss", "com.dili.uap.sdk.domain", "com.dili.mtms.domain","com.dili.mtms.dto"})
 @EnableDiscoveryClient
 @EnableFeignClients
+@EnableScheduling
 public class Application extends SpringBootServletInitializer {
 
     @LoadBalanced

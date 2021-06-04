@@ -6,11 +6,16 @@ import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.mtms.service.TransportOrderItemService;
 import com.dili.mtms.service.TransportOrderService;
 import com.dili.ss.domain.BaseOutput;
+import com.dili.ss.dto.DTOUtils;
+import com.dili.ss.redis.delayqueue.dto.DelayMessage;
+import com.dili.ss.redis.delayqueue.impl.DistributedRedisDelayQueueImpl;
 import com.dili.uid.sdk.rpc.feign.UidFeignRpc;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 /**
  * 运输单管理
@@ -26,6 +31,10 @@ public class TransportOrderApi {
     @Autowired
     UidFeignRpc uidFeignRpc;
 
+    //多实例延时队列
+    @Autowired
+    DistributedRedisDelayQueueImpl redisDelayQueue;
+
     /**
      * 买卖端运输单列表
      *
@@ -36,6 +45,20 @@ public class TransportOrderApi {
     @PostMapping(value = "/listPage")
     public @ResponseBody
     BaseOutput transportList(TransportOrder order) throws Exception {
+        //发送消息
+        DelayMessage delayMessage = DTOUtils.newInstance(DelayMessage.class);
+// 消息topic
+        delayMessage.setTopic("invalidTransportOrderTopic");
+        delayMessage.setBody("消息内容JSON");
+//延时到指定时间点(优先于DelayDuration生效)
+        delayMessage.setDelayTime(System.currentTimeMillis()+5000L);
+//当前时间往后延时秒数
+//        delayMessage.setDelayDuration(30L);
+//消息发送时间
+        delayMessage.setCreateTime(LocalDateTime.now());
+//向延时队列投递消息
+        redisDelayQueue.push(delayMessage);
+
         BaseData data = null;
         try {
             data = transportOrderService.transportList(order);
