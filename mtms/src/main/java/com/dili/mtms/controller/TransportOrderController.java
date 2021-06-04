@@ -1,11 +1,15 @@
 package com.dili.mtms.controller;
 
+import bsh.StringUtil;
 import com.dili.mtms.domain.TransportOrder;
 import com.dili.mtms.dto.BaseData;
+import com.dili.mtms.dto.CfgContent;
 import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.mtms.service.TransportOrderService;
+import com.dili.mtms.utils.DateTimeUtil;
 import com.dili.ss.domain.BaseOutput;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +34,9 @@ public class TransportOrderController {
     public @ResponseBody BaseOutput listByQueryParams(TransportOrderQuey quey) {
         BaseData data = null;
         try {
-            data = transportOrderService.listByQueryParams(quey);
+            //参数组装校验
+            TransportOrderQuey checkQuey = assemblyParm(quey);
+            data = transportOrderService.listByQueryParams(checkQuey);
         }catch (Exception e){
             log.error(e.getMessage(),e);
             return BaseOutput.failure();
@@ -39,35 +45,36 @@ public class TransportOrderController {
     }
 
     /**
-     * 新增TransportOrder
-     * @param transportOrder
-     * @return BaseOutput
+     * 组装查询参数
+     * @param quey
+     * @return
      */
-    @RequestMapping(value="/insert.action", method = {RequestMethod.GET, RequestMethod.POST})
-    public @ResponseBody BaseOutput insert(TransportOrder transportOrder) {
-        transportOrderService.insertSelective(transportOrder);
-        return BaseOutput.success("新增成功");
+    public static TransportOrderQuey assemblyParm(TransportOrderQuey quey) throws Exception{
+
+        //查询时间校验
+        if(StringUtils.isNotBlank(quey.getOrderTime())){
+            quey.setOrderStartTime(DateTimeUtil.startTimeConversion(quey.getOrderTime()));
+            quey.setOrderEndTime(DateTimeUtil.endTimeConversion(quey.getOrderTime()));
+        }
+        if(StringUtils.isNotBlank(quey.getServeTime())){
+            quey.setServiceStartTime(DateTimeUtil.startTimeConversion(quey.getServeTime()));
+            quey.setServiceEndTime(DateTimeUtil.endTimeConversion(quey.getServeTime()));
+        }
+
+        if(StringUtils.isNotBlank(quey.getKeyvalue()) && StringUtils.isNotBlank(quey.getKeyword())){
+            switch (quey.getKeyword()){
+                case CfgContent.CODE:
+                    quey.setCode(quey.getKeyvalue());
+                    break;
+                case CfgContent.SHIPPER_NAME:
+                    quey.setShipperName(quey.getKeyvalue());
+                    break;
+                case CfgContent.SHIPPER_CELLPHONE:
+                    quey.setShipperCellphone(quey.getKeyvalue());
+                    break;
+            }
+        }
+        return quey;
     }
 
-    /**
-     * 修改TransportOrder
-     * @param transportOrder
-     * @return BaseOutput
-     */
-    @RequestMapping(value="/update.action", method = {RequestMethod.GET, RequestMethod.POST})
-    public @ResponseBody BaseOutput update(TransportOrder transportOrder) {
-        transportOrderService.updateSelective(transportOrder);
-        return BaseOutput.success("修改成功");
-    }
-
-    /**
-     * 删除TransportOrder
-     * @param id
-     * @return BaseOutput
-     */
-    @RequestMapping(value="/delete.action", method = {RequestMethod.GET, RequestMethod.POST})
-    public @ResponseBody BaseOutput delete(Long id) {
-        transportOrderService.delete(id);
-        return BaseOutput.success("删除成功");
-    }
 }

@@ -10,6 +10,13 @@ import java.util.List;
  * 运输单dto
  */
 public interface TransportOrderQuey extends TransportOrder {
+
+    String getKeyword();
+    void setKeyword(String keyword);
+
+    String getKeyvalue();
+    void setKeyvalue(String keyvalue);
+
     String getOrderItem();
     void setOrderItem(String orderItem);
 

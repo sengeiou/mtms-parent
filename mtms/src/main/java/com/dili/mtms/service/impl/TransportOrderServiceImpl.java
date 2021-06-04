@@ -39,11 +39,6 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
      */
     @Override
     public BaseData listByQueryParams(TransportOrderQuey quey) throws Exception{
-        //设置查询时间
-        /*quey.setOrderStartTime(DateTimeUtil.startTimeConversion(quey.getOrderTime().split("\\|")[0]));
-        quey.setOrderEndTime(DateTimeUtil.endTimeConversion(quey.getOrderTime().split("\\|")[1]));
-        quey.setServiceStartTime(DateTimeUtil.startTimeConversion(quey.getServeTime().split("\\|")[0]));
-        quey.setServiceEndTime(DateTimeUtil.startTimeConversion(quey.getServeTime().split("\\|")[1]));*/
         //查询数据
         int page = quey.getPage()==null ? 1 : quey.getPage();
         int rows = quey.getRows()==null ? 10 : quey.getRows();

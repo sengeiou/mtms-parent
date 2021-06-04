@@ -31,7 +31,6 @@
             s.taker_cellphone,
             s.take_time,
             s.create_time,
-            t.item_id,
             t.unit_weight,
             t.number,
             t.goods_name,
@@ -62,7 +61,7 @@
         <result column="create_time" property="createTime"/>
 
         <collection property="transportItem" ofType="com.dili.mtms.domain.TransportOrderItem"  >
-            <id column="item_id" property="itemId"/>
+<!--            <id column="item_id" property="itemId"/>-->
             <result column="goods_name" property="goodsName"/>
             <result column="unit_weight" property="unitWeight"/>
             <result column="number" property="number"/>
@@ -162,20 +161,28 @@
       transport_order s
     where
       s.firm_id = #{firmId}
-    <if test="state != 0">
+    <if test="state !=null and state != 0">
       AND s.state = #{state}
     </if>
 
-    <if test="shipperName != null">
-      AND s.shipper_name like '%${shipperName}%'
+    <if test="code !=null and code != ''">
+          AND s.code like '%${code}%'
     </if>
 
-    <if test="orderTime != null">
-      AND s.create_time <![CDATA[>]]> #{orderStartTime} AND s.s.create_time <![CDATA[<]]> #{orderEndTime}
+    <if test="shipperName !=null and shipperName != ''">
+          AND s.shipper_name like '%${shipperName}%'
     </if>
 
-    <if test="serveTime != null">
-      AND s.service_time <![CDATA[>]]> #{serviceStartTime} AND s.s.service_time <![CDATA[<]]> #{serviceEndTime}
+    <if test="shipperCellphone !=null and shipperCellphone != ''">
+          AND s.shipper_cellphone like '%${shipperCellphone}%'
+    </if>
+
+    <if test="orderTime != null and orderTime !=''">
+      AND s.create_time <![CDATA[>]]> #{orderStartTime} AND s.create_time <![CDATA[<]]> #{orderEndTime}
+    </if>
+
+    <if test="serveTime != null and serveTime != ''">
+      AND s.service_time <![CDATA[>]]> #{serviceStartTime} AND s.service_time <![CDATA[<]]> #{serviceEndTime}
     </if>
 
   </select>

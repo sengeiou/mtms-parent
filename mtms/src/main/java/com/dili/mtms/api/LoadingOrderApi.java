@@ -103,7 +103,7 @@ public class LoadingOrderApi {
      */
     @PostMapping(value="/delete")
     public @ResponseBody BaseOutput deleteLoadingOrder(Long id) {
-        loadingOrderService.deleteLoadingOrder(id);
+        //loadingOrderService.deleteLoadingOrder(id);
         return BaseOutput.success("删除成功");
     }
 }

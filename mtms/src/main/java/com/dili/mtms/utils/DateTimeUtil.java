@@ -1,5 +1,7 @@
 package com.dili.mtms.utils;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,8 +17,10 @@ public class DateTimeUtil {
      * @return
      */
     public static Date startTimeConversion(String time) throws ParseException {
+        int index = StringUtils.ordinalIndexOf(time,"-",3);
+        String start = time.substring(0,index).trim();
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = sf.parse(time);
+        Date date = sf.parse(start);
         return date;
     }
 
@@ -26,8 +30,10 @@ public class DateTimeUtil {
      * @return
      */
     public static Date endTimeConversion(String time) throws ParseException {
+        int index = StringUtils.ordinalIndexOf(time,"-",3)+1;
+        String end = time.substring(index).trim();
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = sf.parse(time);
+        Date date = sf.parse(end);
         return date;
     }
 
