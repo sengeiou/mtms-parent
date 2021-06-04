@@ -14,6 +14,16 @@ import java.util.List;
 public interface LoadingOrderQuey extends LoadingOrder {
 
     /**
+     * pc端关键字查询
+     * @return
+     */
+    String getKeyword();
+    void setKeyword(String keyword);
+
+    String getKeyvalue();
+    void setKeyvalue(String keyvalue);
+
+    /**
      * 司机端查询状态
      * @return
      */
@@ -35,20 +45,10 @@ public interface LoadingOrderQuey extends LoadingOrder {
     List<LoadingOrderItem> getLoadingItem();
     void setLoadingItem(List<LoadingOrderItem> loadingItem);
 
-   /* String getOrderItem();
-    void setOrderItem(String orderItem);
-
-    *//**
-     * 运输单项
-     * @return
-     *//*
-    List<TransportOrderItem> getTransportItem();
-    void setTransportItem(List<TransportOrderItem> transportItem);
-
-    *//**
+    /**
      * 订单时间查询区间
      * @return
-     *//*
+     */
     String getOrderTime();
     void setOrderTime(String orderTime);
 
@@ -58,10 +58,10 @@ public interface LoadingOrderQuey extends LoadingOrder {
     Date getOrderEndTime();
     void setOrderEndTime(Date orderEndTime);
 
-    *//**
+    /**
      * 服务时间查询区间
      * @return
-     *//*
+     */
     String getServeTime();
     void setServeTime(String serveTime);
 
@@ -69,6 +69,6 @@ public interface LoadingOrderQuey extends LoadingOrder {
     void setServiceStartTime(Date serviceStartTime);
 
     Date getServiceEndTime();
-    void setServiceEndTime(Date serviceEndTime);*/
+    void setServiceEndTime(Date serviceEndTime);
 
 }

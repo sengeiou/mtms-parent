@@ -35,7 +35,7 @@ public class TransportOrderController {
         BaseData data = null;
         try {
             //参数组装校验
-            TransportOrderQuey checkQuey = assemblyParm(quey);
+            TransportOrderQuey checkQuey = assemblyParam(quey);
             data = transportOrderService.listByQueryParams(checkQuey);
         }catch (Exception e){
             log.error(e.getMessage(),e);
@@ -49,7 +49,7 @@ public class TransportOrderController {
      * @param quey
      * @return
      */
-    public static TransportOrderQuey assemblyParm(TransportOrderQuey quey) throws Exception{
+    public static TransportOrderQuey assemblyParam(TransportOrderQuey quey) throws Exception{
 
         //查询时间校验
         if(StringUtils.isNotBlank(quey.getOrderTime())){

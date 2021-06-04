@@ -21,4 +21,6 @@ public interface LoadingOrderMapper extends MyMapper<LoadingOrder> {
     void deleteLoadingOrder(Long id);
 
     void deleteLoadingOrderItem(Long id);
+
+    List<LoadingOrderQuey> listByQueryParams(LoadingOrderQuey quey);
 }

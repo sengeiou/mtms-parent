@@ -3,6 +3,7 @@ package com.dili.mtms.service;
 import com.dili.mtms.domain.LoadingOrder;
 import com.dili.mtms.dto.BaseData;
 import com.dili.mtms.dto.LoadingOrderQuey;
+import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.ss.base.BaseService;
 
 /**
@@ -38,4 +39,12 @@ public interface LoadingOrderService extends BaseService<LoadingOrder, Long> {
      * @return
      */
     LoadingOrderQuey loadingDetail(LoadingOrderQuey order)throws Exception;
+
+    /**
+     * pc端-装卸-列表
+     * @param checkQuey
+     * @return
+     * @throws Exception
+     */
+    BaseData listByQueryParams(LoadingOrderQuey checkQuey)throws Exception;
 }

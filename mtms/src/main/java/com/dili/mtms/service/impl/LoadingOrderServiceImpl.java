@@ -89,4 +89,24 @@ public class LoadingOrderServiceImpl extends BaseServiceImpl<LoadingOrder, Long>
     public LoadingOrderQuey loadingDetail(LoadingOrderQuey order) throws Exception {
         return loadingOrderMapper.loadingDetail(order.getId());
     }
+
+    /**
+     * pc-装卸-列表
+     * @param quey
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public BaseData listByQueryParams(LoadingOrderQuey quey) throws Exception {
+        //查询数据
+        int page = quey.getPage()==null ? 1 : quey.getPage();
+        int rows = quey.getRows()==null ? 10 : quey.getRows();
+        PageHelper.startPage(page, rows);
+        List<LoadingOrderQuey> list = loadingOrderMapper.listByQueryParams(quey);
+        Long total = list instanceof Page ? ((Page) list).getTotal() : list.size();
+        BaseData baseData = new BaseData();
+        baseData.setTotal(total);
+        baseData.setRows(list);
+        return baseData;
+    }
 }
