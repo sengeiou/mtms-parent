@@ -16,4 +16,10 @@ public class CfgContent {
      * 客户手机号
      */
     public static final String SHIPPER_CELLPHONE = "shipperCellphone";
+
+    /**
+     * 计件
+     */
+    public static final int PIECE = 1;
+
 }

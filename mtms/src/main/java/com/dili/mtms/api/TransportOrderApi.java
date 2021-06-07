@@ -64,7 +64,6 @@ public class TransportOrderApi {
     @PostMapping(value = "/insert")
     public @ResponseBody
     BaseOutput insertTransport(@RequestBody TransportOrderQuey order) {
-        //BaseOutput baseOutput = new BaseOutput();
         try {
             //获取订单号
             /*BaseOutput<String> bizNumber = uidFeignRpc.getBizNumber("");
@@ -107,10 +106,13 @@ public class TransportOrderApi {
     @PostMapping(value = "/cancel")
     public @ResponseBody BaseOutput transportCancel(TransportOrder order) {
         try {
-            transportOrderService.updateSelective(order);
+            int i = transportOrderService.transportCancel(order);
+            if (i<1){
+                return BaseOutput.failure("操纵失败");
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure("系统异常");
         }
         return BaseOutput.success();
     }
@@ -123,9 +125,9 @@ public class TransportOrderApi {
      */
     @PostMapping(value = "/confirmOrder")
     public @ResponseBody
-    BaseOutput confirmOrder(TransportOrder order) {
+    BaseOutput confirmTransportOrder(TransportOrder order) {
         try {
-            transportOrderService.updateSelective(order);
+            int i = transportOrderService.confirmTransportOrder(order);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return BaseOutput.failure();
@@ -141,9 +143,9 @@ public class TransportOrderApi {
      */
     @PostMapping(value = "/complete")
     public @ResponseBody
-    BaseOutput complete(TransportOrder order) {
+    BaseOutput transportComplete(TransportOrder order) {
         try {
-            transportOrderService.updateSelective(order);
+            int i = transportOrderService.transportComplete(order);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return BaseOutput.failure();
@@ -154,17 +156,19 @@ public class TransportOrderApi {
     /**
      * 删除订单
      *
-     * @param id
+     * @param order
      * @return
      */
     @PostMapping(value = "/delete")
-    public @ResponseBody
-    BaseOutput deleteTransporOrder(Long id) {
+    public @ResponseBody BaseOutput deleteTransporOrder(TransportOrder order) {
         try {
-            transportOrderService.deleteTransporOrder(id);
+            int i = transportOrderService.deleteTransporOrder(order);
+            if(i<1){
+                return BaseOutput.failure("操作失败");
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure("系统异常");
         }
         return BaseOutput.success();
     }

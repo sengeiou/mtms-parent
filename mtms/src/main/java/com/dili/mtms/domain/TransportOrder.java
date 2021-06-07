@@ -104,6 +104,20 @@ public interface TransportOrder extends IBaseDomain {
 
     void setTakerId(Long takerId);
 
+    @Column(name = "`taker_name`")
+    @FieldDef(label="接单人姓名", maxLength = 20)
+    @EditMode(editor = FieldEditor.Text, required = false)
+    String getTakerName();
+
+    void setTakerName(String takerName);
+
+    @Column(name = "`taker_cellphone`")
+    @FieldDef(label="接单人电话", maxLength = 20)
+    @EditMode(editor = FieldEditor.Text, required = false)
+    String getTakerCellphone();
+
+    void setTakerCellphone(String takerCellphone);
+
     @Column(name = "`offer`")
     @FieldDef(label="报价(元)")
     @EditMode(editor = FieldEditor.Number, required = false)

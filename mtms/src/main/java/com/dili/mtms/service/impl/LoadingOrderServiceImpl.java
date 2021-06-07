@@ -109,4 +109,39 @@ public class LoadingOrderServiceImpl extends BaseServiceImpl<LoadingOrder, Long>
         baseData.setRows(list);
         return baseData;
     }
+
+
+    /**
+     * 取消装卸单
+     * @param loadingOrder
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int loadingCancel(LoadingOrder loadingOrder) throws Exception {
+        return loadingOrderMapper.loadingCancel(loadingOrder);
+    }
+
+    /**
+     * 订单完成
+     * @param loadingOrder
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int loadingComplete(LoadingOrder loadingOrder) throws Exception {
+        return loadingOrderMapper.loadingComplete(loadingOrder);
+    }
+
+
+    /**
+     * 装卸单 确认接单
+     * @param loadingOrder
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int confirmLoadingOrder(LoadingOrder loadingOrder) throws Exception {
+        return loadingOrderMapper.confirmLoadingOrder(loadingOrder);
+    }
 }

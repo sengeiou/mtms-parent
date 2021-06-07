@@ -73,13 +73,13 @@ public class AddressApi {
 
     /**
      * 删除Address
-     * @param id
+     * @param address
      * @return BaseOutput
      */
     @PostMapping(value="/delete")
-    public @ResponseBody BaseOutput delete(Long id) {
+    public @ResponseBody BaseOutput delete(Address address) {
         try {
-            addressService.delete(id);
+            addressService.delete(address.getId());
         }catch (Exception e){
             log.error(e.getMessage(),e);
             return BaseOutput.failure();

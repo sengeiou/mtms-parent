@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.dili.mtms.domain.TransportOrder;
 import com.dili.mtms.domain.TransportOrderItem;
 import com.dili.mtms.dto.BaseData;
+import com.dili.mtms.dto.CfgContent;
 import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.mtms.mapper.TransportOrderMapper;
 import com.dili.mtms.service.TransportOrderService;
@@ -82,6 +83,11 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
     public int insertTransport(TransportOrderQuey order) throws Exception {
         //订单项数据处理
         List<TransportOrderItem> list = JSONArray.parseArray(order.getOrderItem(),TransportOrderItem.class);
+        for(TransportOrderItem item:list){
+            if(item.getWeightType() == CfgContent.PIECE){//计件
+                 item.setTotalWeight(item.getNumber()*item.getUnitWeight());
+            }
+        }
         int i = mapper.insertTransport(order);
         int j = mapper.insertTransportItem(list,order.getId());
         return 1;
@@ -99,13 +105,50 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
 
     /**
      * 买卖段-运输-删除
-     * @param id
+     * @param order
      * @throws Exception
      */
     @Override
-    public void deleteTransporOrder(Long id) throws Exception {
-        mapper.deleteTransporOrderItem(id);
-        mapper.deleteTransporOrder(id);
+    public int deleteTransporOrder(TransportOrder order) throws Exception {
+        int i = mapper.deleteTransporOrder(order);
+        if(i>0){
+            return mapper.deleteTransporOrderItem(order);
+        }
+        return 0;
+
+    }
+
+    /**
+     * 取消运输单
+     * @param order
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int transportCancel(TransportOrder order) throws Exception {
+        return mapper.transportCancel(order);
+    }
+
+    /**
+     * 运输单 确认收货
+     * @param order
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int transportComplete(TransportOrder order) throws Exception {
+        return mapper.transportComplete(order);
+    }
+
+    /**
+     * 运输单（司机确认接单）
+     * @param order
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int confirmTransportOrder(TransportOrder order) throws Exception {
+        return mapper.confirmTransportOrder(order);
     }
 
 }

@@ -20,7 +20,13 @@ public interface TransportOrderMapper extends MyMapper<TransportOrder> {
 
     TransportOrderQuey transportDetail(Long id);
 
-    void deleteTransporOrder(Long id);
+    int deleteTransporOrder(TransportOrder order);
 
-    void deleteTransporOrderItem(Long id);
+    int deleteTransporOrderItem(TransportOrder order);
+
+    int transportCancel(TransportOrder order);
+
+    int transportComplete(TransportOrder order);
+
+    int confirmTransportOrder(TransportOrder order);
 }

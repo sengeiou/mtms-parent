@@ -45,7 +45,28 @@ public interface TransportOrderService extends BaseService<TransportOrder, Long>
 
     /**
      * 买卖段-运输-删除
-     * @param id
+     * @param order
      */
-    void deleteTransporOrder(Long id)throws Exception;
+    int deleteTransporOrder(TransportOrder order)throws Exception;
+
+    /**
+     * 取消运输单
+     * @param order
+     * @return
+     */
+    int transportCancel(TransportOrder order)throws Exception;
+
+    /**
+     * 运输单 确认收货
+     * @param order
+     * @return
+     */
+    int transportComplete(TransportOrder order)throws Exception;
+
+    /**
+     * 运输单（司机确认接单）
+     * @param order
+     * @return
+     */
+    int confirmTransportOrder(TransportOrder order)throws Exception;
 }

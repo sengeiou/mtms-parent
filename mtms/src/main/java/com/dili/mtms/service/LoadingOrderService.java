@@ -47,4 +47,26 @@ public interface LoadingOrderService extends BaseService<LoadingOrder, Long> {
      * @throws Exception
      */
     BaseData listByQueryParams(LoadingOrderQuey checkQuey)throws Exception;
+
+    /**
+     * 取消装卸单
+     * @param loadingOrder
+     * @return
+     */
+    int loadingCancel(LoadingOrder loadingOrder)throws Exception;
+
+    /**
+     * 订单完成
+     * @param loadingOrder
+     * @return
+     * @throws Exception
+     */
+    int loadingComplete(LoadingOrder loadingOrder)throws Exception;
+
+    /**
+     * 装卸单 确认接单
+     * @param loadingOrder
+     * @return
+     */
+    int confirmLoadingOrder(LoadingOrder loadingOrder)throws Exception;
 }

@@ -2,6 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dili.mtms.mapper.LoadingOrderMapper">
 
+    <!--确认接单 -->
+    <update id="confirmLoadingOrder" parameterType="com.dili.mtms.domain.LoadingOrder">
+        update loading_order s
+        <set>
+            <if test="takerId != null">
+                s.taker_id = #{takerId},
+            </if>
+
+            <if test="takerName != null">
+                s.taker_name = #{takerName},
+            </if>
+
+            <if test="takerCellphone != null">
+                s.taker_cellphone = #{takerCellphone},
+            </if>
+                s.state = 2,
+                s.take_time = now()
+        </set>
+        where s.id = #{id}  and s.state = 1
+    </update>
+
+    <!--订单完成 -->
+    <update id="loadingComplete" parameterType="com.dili.mtms.domain.LoadingOrder">
+        update loading_order s set s.state = 3,s.complete_time = now() where s.id = #{id} and s.state = 2
+    </update>
+
+    <!--取消装卸单 -->
+    <update id="loadingCancel" parameterType="com.dili.mtms.domain.LoadingOrder">
+        update loading_order s set s.state = 4,s.cancel_time = now() where s.id = #{id} and s.state = 1
+    </update>
+
     <!-- pc装卸列表-->
     <select id="listByQueryParams" parameterType="com.dili.mtms.dto.LoadingOrderQuey" resultType="com.dili.mtms.dto.LoadingOrderQuey">
         SELECT
@@ -50,7 +81,7 @@
     </delete>
 
     <delete id="deleteLoadingOrder">
-        delete from loading_order where id = #{id}
+        delete from loading_order where id = #{id} and (state = 4 or state = 5)
     </delete>
 
     <!-- 装卸单-详情-->
@@ -153,11 +184,11 @@
        from loading_order l left join loading_order_item i on l.id = i.loading_order_id
        where l.firm_id = #{firmId}
       <if test="status != null and status == 1 ">
-          AND s.state = 1
+          AND l.state = 1
       </if>
 
       <if test="status != null and status == 2 ">
-          AND s.state = 2 or s.state = 3
+          AND l.state = 2 or l.state = 3
       </if>
   </select>
   <resultMap id="LoadingOrder" type="com.dili.mtms.dto.LoadingOrderQuey">

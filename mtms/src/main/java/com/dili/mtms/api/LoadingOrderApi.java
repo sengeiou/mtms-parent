@@ -88,20 +88,30 @@ public class LoadingOrderApi {
      * @return
      */
     @PostMapping(value="/cancel")
-    public @ResponseBody BaseOutput cancel(LoadingOrder loadingOrder) {
-        loadingOrderService.updateSelective(loadingOrder);
-        return BaseOutput.success("修改成功");
+    public @ResponseBody BaseOutput loadingCancel(LoadingOrder loadingOrder) {
+        try {
+            int i = loadingOrderService.loadingCancel(loadingOrder);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            return BaseOutput.failure();
+        }
+        return BaseOutput.success();
     }
 
     /**
-     * 确认接单
+     * 确认接单(司机端装卸)
      * @param loadingOrder
      * @return
      */
     @PostMapping(value="/confirmOrder")
-    public @ResponseBody BaseOutput confirmOrder(LoadingOrder loadingOrder) {
-        loadingOrderService.updateSelective(loadingOrder);
-        return BaseOutput.success("修改成功");
+    public @ResponseBody BaseOutput confirmLoadingOrder(LoadingOrder loadingOrder) {
+        try {
+            int i = loadingOrderService.confirmLoadingOrder(loadingOrder);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            return BaseOutput.failure();
+        }
+        return BaseOutput.success();
     }
 
     /**
@@ -110,9 +120,14 @@ public class LoadingOrderApi {
      * @return
      */
     @PostMapping(value="/complete")
-    public @ResponseBody BaseOutput complete(LoadingOrder loadingOrder) {
-        loadingOrderService.updateSelective(loadingOrder);
-        return BaseOutput.success("修改成功");
+    public @ResponseBody BaseOutput loadingComplete(LoadingOrder loadingOrder) {
+        try {
+            int i = loadingOrderService.loadingComplete(loadingOrder);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            return BaseOutput.failure();
+        }
+        return BaseOutput.success();
     }
 
     /**
@@ -122,7 +137,12 @@ public class LoadingOrderApi {
      */
     @PostMapping(value="/delete")
     public @ResponseBody BaseOutput deleteLoadingOrder(Long id) {
-        //loadingOrderService.deleteLoadingOrder(id);
-        return BaseOutput.success("删除成功");
+        try {
+            loadingOrderService.deleteLoadingOrder(id);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            return BaseOutput.failure();
+        }
+        return BaseOutput.success();
     }
 }
