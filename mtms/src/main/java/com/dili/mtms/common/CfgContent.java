@@ -1,4 +1,4 @@
-package com.dili.mtms.dto;
+package com.dili.mtms.common;
 
 public class CfgContent {
 
@@ -21,5 +21,20 @@ public class CfgContent {
      * 计件
      */
     public static final int PIECE = 1;
+
+    /**
+     * 系统异常
+     */
+    public static final String SYSTEM_EXCEPTION = "系统异常";
+
+    /**
+     * 运输订单编号
+     */
+    public static final String TRANSPORT_NO = "zxwl_transportOrderNo";
+
+    /**
+     * 装卸订单编号
+     */
+    public static final String LOADING_NO = "zxwl_loadingOrderNo";
 
 }

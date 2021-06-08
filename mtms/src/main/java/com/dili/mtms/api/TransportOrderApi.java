@@ -1,21 +1,17 @@
 package com.dili.mtms.api;
 
+import com.dili.mtms.common.BaseData;
+import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.domain.TransportOrder;
-import com.dili.mtms.dto.BaseData;
 import com.dili.mtms.dto.TransportOrderQuey;
-import com.dili.mtms.service.TransportOrderItemService;
 import com.dili.mtms.service.TransportOrderService;
 import com.dili.ss.domain.BaseOutput;
-import com.dili.ss.dto.DTOUtils;
-import com.dili.ss.redis.delayqueue.dto.DelayMessage;
 import com.dili.ss.redis.delayqueue.impl.DistributedRedisDelayQueueImpl;
 import com.dili.uid.sdk.rpc.feign.UidFeignRpc;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.Logger;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 /**
  * 运输单管理
@@ -50,7 +46,7 @@ public class TransportOrderApi {
             data = transportOrderService.transportList(order);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success().setData(data);
     }
@@ -66,14 +62,17 @@ public class TransportOrderApi {
     BaseOutput insertTransport(@RequestBody TransportOrderQuey order) {
         try {
             //获取订单号
-            /*BaseOutput<String> bizNumber = uidFeignRpc.getBizNumber("");
-            if (!bizNumber.isSuccess()) {
+            BaseOutput<String> bizNumber = uidFeignRpc.getBizNumber(CfgContent.TRANSPORT_NO);
+            if (bizNumber.isSuccess()) {
                 String number = bizNumber.getData();
-            }*/
-            int i = transportOrderService.insertTransport(order);
+                order.setCode(number);
+            }else {
+                return BaseOutput.failure("获取订单编号失败");
+            }
+            transportOrderService.insertTransport(order);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success();
     }
@@ -92,7 +91,7 @@ public class TransportOrderApi {
             detailInfo = transportOrderService.transportDetail(order);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success().setData(detailInfo);
     }
@@ -108,11 +107,11 @@ public class TransportOrderApi {
         try {
             int i = transportOrderService.transportCancel(order);
             if (i<1){
-                return BaseOutput.failure("操纵失败");
+                return BaseOutput.failure("订单取消失败");
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return BaseOutput.failure("系统异常");
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success();
     }
@@ -130,7 +129,7 @@ public class TransportOrderApi {
             int i = transportOrderService.confirmTransportOrder(order);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success();
     }
@@ -148,7 +147,7 @@ public class TransportOrderApi {
             int i = transportOrderService.transportComplete(order);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success();
     }
@@ -164,11 +163,11 @@ public class TransportOrderApi {
         try {
             int i = transportOrderService.deleteTransporOrder(order);
             if(i<1){
-                return BaseOutput.failure("操作失败");
+                return BaseOutput.failure("订单删除失败");
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return BaseOutput.failure("系统异常");
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success();
     }

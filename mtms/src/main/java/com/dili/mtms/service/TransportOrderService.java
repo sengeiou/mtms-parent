@@ -1,12 +1,9 @@
 package com.dili.mtms.service;
 
+import com.dili.mtms.common.BaseData;
 import com.dili.mtms.domain.TransportOrder;
-import com.dili.mtms.dto.BaseData;
 import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.ss.base.BaseService;
-import com.dili.ss.domain.PageOutput;
-
-import java.util.List;
 
 /**
  * 由MyBatis Generator工具自动生成
@@ -34,7 +31,7 @@ public interface TransportOrderService extends BaseService<TransportOrder, Long>
      * @return
      * @throws Exception
      */
-    int insertTransport(TransportOrderQuey order)throws Exception;
+    void insertTransport(TransportOrderQuey order)throws Exception;
 
     /**
      * 买卖端-运输单-详情

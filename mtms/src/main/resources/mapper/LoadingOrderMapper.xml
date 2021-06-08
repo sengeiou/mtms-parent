@@ -30,7 +30,7 @@
 
     <!--取消装卸单 -->
     <update id="loadingCancel" parameterType="com.dili.mtms.domain.LoadingOrder">
-        update loading_order s set s.state = 4,s.cancel_time = now() where s.id = #{id} and s.state = 1
+        update loading_order s set s.state = 5,s.cancel_time = now() where s.id = #{id} and s.state = 1
     </update>
 
     <!-- pc装卸列表-->
@@ -146,7 +146,8 @@
 
     <!-- 买卖端-装卸-新增loading-->
     <insert id="insertLoading" useGeneratedKeys="true" keyProperty="id" parameterType="com.dili.mtms.dto.LoadingOrderQuey">
-        insert into loading_order(shipper_name,
+        insert into loading_order(code,
+                                  shipper_name,
                                   shipper_cellphone,
                                   address,
                                   service_type,
@@ -157,7 +158,8 @@
                                   code,
                                   state,
                                   create_time
-        ) values (#{shipperName},
+        ) values (#{code},
+                  #{shipperName},
                   #{shipperCellphone},
                   #{address},
                   #{serviceType},

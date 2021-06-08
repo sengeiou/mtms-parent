@@ -1,22 +1,20 @@
 package com.dili.mtms.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.dili.mtms.common.BaseData;
+import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.domain.TransportOrder;
 import com.dili.mtms.domain.TransportOrderItem;
-import com.dili.mtms.dto.BaseData;
-import com.dili.mtms.dto.CfgContent;
 import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.mtms.mapper.TransportOrderMapper;
 import com.dili.mtms.service.TransportOrderService;
-import com.dili.mtms.utils.DateTimeUtil;
 import com.dili.ss.base.BaseServiceImpl;
-import com.dili.ss.domain.PageOutput;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -79,8 +77,9 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
      * @return
      * @throws Exception
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public int insertTransport(TransportOrderQuey order) throws Exception {
+    public void insertTransport(TransportOrderQuey order) throws Exception {
         //订单项数据处理
         List<TransportOrderItem> list = JSONArray.parseArray(order.getOrderItem(),TransportOrderItem.class);
         for(TransportOrderItem item:list){
@@ -88,9 +87,8 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
                  item.setTotalWeight(item.getNumber()*item.getUnitWeight());
             }
         }
-        int i = mapper.insertTransport(order);
-        int j = mapper.insertTransportItem(list,order.getId());
-        return 1;
+        mapper.insertTransport(order);
+        mapper.insertTransportItem(list,order.getId());
     }
 
     /**
@@ -108,6 +106,7 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
      * @param order
      * @throws Exception
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int deleteTransporOrder(TransportOrder order) throws Exception {
         int i = mapper.deleteTransporOrder(order);
@@ -124,6 +123,7 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
      * @return
      * @throws Exception
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int transportCancel(TransportOrder order) throws Exception {
         return mapper.transportCancel(order);
@@ -135,6 +135,7 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
      * @return
      * @throws Exception
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int transportComplete(TransportOrder order) throws Exception {
         return mapper.transportComplete(order);
@@ -146,6 +147,7 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
      * @return
      * @throws Exception
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int confirmTransportOrder(TransportOrder order) throws Exception {
         return mapper.confirmTransportOrder(order);

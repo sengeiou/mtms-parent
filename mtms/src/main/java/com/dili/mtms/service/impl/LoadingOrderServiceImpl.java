@@ -1,12 +1,11 @@
 package com.dili.mtms.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.dili.mtms.common.BaseData;
+import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.domain.LoadingOrder;
 import com.dili.mtms.domain.LoadingOrderItem;
-import com.dili.mtms.domain.TransportOrderItem;
-import com.dili.mtms.dto.BaseData;
 import com.dili.mtms.dto.LoadingOrderQuey;
-import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.mtms.mapper.LoadingOrderMapper;
 import com.dili.mtms.service.LoadingOrderService;
 import com.dili.ss.base.BaseServiceImpl;
@@ -14,6 +13,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -59,13 +59,18 @@ public class LoadingOrderServiceImpl extends BaseServiceImpl<LoadingOrder, Long>
      * @return
      * @throws Exception
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public int insertLoading(LoadingOrderQuey order) throws Exception {
+    public void insertLoading(LoadingOrderQuey order) throws Exception {
         //订单项数据处理
         List<LoadingOrderItem> list = JSONArray.parseArray(order.getOrderItem(), LoadingOrderItem.class);
-        int i = loadingOrderMapper.insertLoading(order);
-        int j = loadingOrderMapper.insertLoadingItem(list,order.getId());
-        return 1;
+        for(LoadingOrderItem item:list){
+            if(item.getWeightType() == CfgContent.PIECE){//计件
+                item.setTotalWeight(item.getNumber()*item.getUnitWeight());
+            }
+        }
+        loadingOrderMapper.insertLoading(order);
+        loadingOrderMapper.insertLoadingItem(list,order.getId());
     }
 
     /**
@@ -73,6 +78,7 @@ public class LoadingOrderServiceImpl extends BaseServiceImpl<LoadingOrder, Long>
      * @param id
      * @throws Exception
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteLoadingOrder(Long id) throws Exception {
         loadingOrderMapper.deleteLoadingOrder(id);
@@ -117,6 +123,7 @@ public class LoadingOrderServiceImpl extends BaseServiceImpl<LoadingOrder, Long>
      * @return
      * @throws Exception
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int loadingCancel(LoadingOrder loadingOrder) throws Exception {
         return loadingOrderMapper.loadingCancel(loadingOrder);
@@ -128,6 +135,7 @@ public class LoadingOrderServiceImpl extends BaseServiceImpl<LoadingOrder, Long>
      * @return
      * @throws Exception
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int loadingComplete(LoadingOrder loadingOrder) throws Exception {
         return loadingOrderMapper.loadingComplete(loadingOrder);
@@ -140,6 +148,7 @@ public class LoadingOrderServiceImpl extends BaseServiceImpl<LoadingOrder, Long>
      * @return
      * @throws Exception
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int confirmLoadingOrder(LoadingOrder loadingOrder) throws Exception {
         return loadingOrderMapper.confirmLoadingOrder(loadingOrder);

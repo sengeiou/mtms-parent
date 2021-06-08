@@ -14,9 +14,9 @@ public interface TransportOrderMapper extends MyMapper<TransportOrder> {
 
     List<TransportOrderQuey> transportList(TransportOrderQuey order);
 
-    int insertTransport(TransportOrderQuey order);
+    void insertTransport(TransportOrderQuey order);
 
-    int insertTransportItem(@Param("list") List<TransportOrderItem> list, @Param("id") Long id);
+    void insertTransportItem(@Param("list") List<TransportOrderItem> list, @Param("id") Long id);
 
     TransportOrderQuey transportDetail(Long id);
 

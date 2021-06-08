@@ -1,13 +1,14 @@
 package com.dili.mtms.api;
 
+import com.dili.mtms.common.BaseData;
+import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.domain.LoadingOrder;
-import com.dili.mtms.dto.BaseData;
 import com.dili.mtms.dto.LoadingOrderQuey;
-import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.mtms.service.LoadingOrderService;
 import com.dili.ss.domain.BaseOutput;
 import com.dili.uid.sdk.rpc.feign.UidFeignRpc;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * 装卸单管理
  */
 @RestController
-@RequestMapping("/api/loadingOrder")
+@RequestMapping("/api/loading")
 @Slf4j
 public class LoadingOrderApi {
 
@@ -38,7 +39,7 @@ public class LoadingOrderApi {
             data = loadingOrderService.loadingList(loadingOrder);
         }catch (Exception e){
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success().setData(data);
     }
@@ -55,7 +56,7 @@ public class LoadingOrderApi {
             detailInfo = loadingOrderService.loadingDetail(order);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success().setData(detailInfo);
     }
@@ -70,14 +71,17 @@ public class LoadingOrderApi {
     public @ResponseBody BaseOutput insertLoading(@RequestBody LoadingOrderQuey order) {
         try {
             //获取订单号
-            /*BaseOutput<String> bizNumber = uidFeignRpc.getBizNumber("");
-            if (!bizNumber.isSuccess()) {
+            BaseOutput<String> bizNumber = uidFeignRpc.getBizNumber(CfgContent.LOADING_NO);
+            if (bizNumber.isSuccess()) {
                 String number = bizNumber.getData();
-            }*/
-            int i = loadingOrderService.insertLoading(order);
+                order.setCode(number);
+            }else {
+                return BaseOutput.failure("获取订单编号失败");
+            }
+            loadingOrderService.insertLoading(order);
         }catch (Exception e){
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success();
     }
@@ -93,7 +97,7 @@ public class LoadingOrderApi {
             int i = loadingOrderService.loadingCancel(loadingOrder);
         }catch (Exception e){
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success();
     }
@@ -109,7 +113,7 @@ public class LoadingOrderApi {
             int i = loadingOrderService.confirmLoadingOrder(loadingOrder);
         }catch (Exception e){
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success();
     }
@@ -125,7 +129,7 @@ public class LoadingOrderApi {
             int i = loadingOrderService.loadingComplete(loadingOrder);
         }catch (Exception e){
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success();
     }
@@ -141,7 +145,7 @@ public class LoadingOrderApi {
             loadingOrderService.deleteLoadingOrder(id);
         }catch (Exception e){
             log.error(e.getMessage(), e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success();
     }

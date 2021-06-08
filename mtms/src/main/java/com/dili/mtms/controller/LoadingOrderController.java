@@ -1,20 +1,16 @@
 package com.dili.mtms.controller;
 
+import com.dili.mtms.common.BaseData;
+import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.domain.LoadingOrder;
-import com.dili.mtms.dto.BaseData;
-import com.dili.mtms.dto.CfgContent;
 import com.dili.mtms.dto.LoadingOrderQuey;
-import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.mtms.service.LoadingOrderService;
 import com.dili.mtms.utils.DateTimeUtil;
 import com.dili.ss.domain.BaseOutput;
-import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -42,7 +38,7 @@ public class LoadingOrderController {
             data = loadingOrderService.listByQueryParams(checkQuey);
         }catch (Exception e){
             log.error(e.getMessage(),e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success().setData(data);
     }

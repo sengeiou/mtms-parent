@@ -12,9 +12,9 @@ public interface LoadingOrderMapper extends MyMapper<LoadingOrder> {
 
     List<LoadingOrderQuey> loadingList(LoadingOrderQuey order);
 
-    int insertLoading(LoadingOrderQuey order);
+    void insertLoading(LoadingOrderQuey order);
 
-    int insertLoadingItem(@Param("list") List<LoadingOrderItem> list, @Param("id") Long id);
+    void insertLoadingItem(@Param("list") List<LoadingOrderItem> list, @Param("id") Long id);
 
     LoadingOrderQuey loadingDetail(Long id);
 

@@ -1,9 +1,7 @@
 package com.dili.mtms.controller;
 
-import bsh.StringUtil;
-import com.dili.mtms.domain.TransportOrder;
-import com.dili.mtms.dto.BaseData;
-import com.dili.mtms.dto.CfgContent;
+import com.dili.mtms.common.BaseData;
+import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.mtms.service.TransportOrderService;
 import com.dili.mtms.utils.DateTimeUtil;
@@ -39,7 +37,7 @@ public class TransportOrderController {
             data = transportOrderService.listByQueryParams(checkQuey);
         }catch (Exception e){
             log.error(e.getMessage(),e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success().setData(data);
     }

@@ -30,7 +30,7 @@
 
     <!--取消运输单 -->
     <update id="transportCancel" parameterType="com.dili.mtms.domain.TransportOrder">
-        update transport_order s set s.state = 4,s.cancel_time = now() where s.id = #{id} and s.state = 1
+        update transport_order s set s.state = 5,s.cancel_time = now() where s.id = #{id} and s.state = 1
     </update>
 
     <delete id="deleteTransporOrderItem" parameterType="com.dili.mtms.domain.TransportOrder">
@@ -113,7 +113,8 @@
   <!--买卖端新增运输单 -->
   <insert id="insertTransport" useGeneratedKeys="true" keyProperty="id"
           parameterType="com.dili.mtms.dto.TransportOrderQuey">
-     insert into transport_order(shipper_name,
+     insert into transport_order(code,
+                                 shipper_name,
                                  shipper_cellphone,
                                  shipper_address,
                                  delivery_name,
@@ -127,7 +128,8 @@
                                  state,
                                  notes,
                                  create_time
-     ) values (#{shipperName},
+     ) values (#{code},
+               #{shipperName},
                #{shipperCellphone},
                #{shipperAddress},
                #{deliveryName},
