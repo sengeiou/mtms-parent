@@ -1,4 +1,4 @@
-package com.dili.mtms.dto;
+package com.dili.mtms.common;
 
 import lombok.Data;
 
