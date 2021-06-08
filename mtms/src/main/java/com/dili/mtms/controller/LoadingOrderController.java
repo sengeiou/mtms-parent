@@ -29,7 +29,7 @@ public class LoadingOrderController {
      * @param quey
      * @return
      */
-    @PostMapping(value="/listPage.action")
+    @PostMapping(value="/listPage")
     public @ResponseBody BaseOutput listByQueryParams(LoadingOrderQuey quey){
         BaseData data = null;
         try {
@@ -48,7 +48,7 @@ public class LoadingOrderController {
      * @param loadingOrder
      * @return BaseOutput
      */
-    @RequestMapping(value="/update.action", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value="/update", method = {RequestMethod.GET, RequestMethod.POST})
     public @ResponseBody BaseOutput update(LoadingOrder loadingOrder) {
         loadingOrderService.updateSelective(loadingOrder);
         return BaseOutput.success("修改成功");
