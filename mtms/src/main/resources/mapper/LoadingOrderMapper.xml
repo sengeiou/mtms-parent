@@ -163,7 +163,6 @@
                                   offer,
                                   notes,
                                   firm_id,
-                                  code,
                                   state,
                                   create_time
         ) values (#{code},
@@ -176,8 +175,7 @@
                   #{offer},
                   #{notes},
                   #{firmId},
-                  #{code},
-                  #{state},
+                  1,
                   now()
                  )
     </insert>
@@ -185,6 +183,7 @@
   <select id="loadingList" parameterType="com.dili.mtms.dto.LoadingOrderQuey" resultMap="LoadingOrder">
        select
               l.id,
+              l.offer,
               l.address,
               l.state,
               l.shipper_cellphone,
@@ -201,9 +200,11 @@
       <if test="status != null and status == 2 ">
           AND l.state = 2 or l.state = 3
       </if>
+          order by l.create_time desc
   </select>
   <resultMap id="LoadingOrder" type="com.dili.mtms.dto.LoadingOrderQuey">
     <id column="id" property="id"/>
+    <result column="offer" property="offer"/>
     <result column="address" property="address"/>
     <result column="state" property="state"/>
     <result column="shipper_cellphone" property="shipperCellphone"/>
