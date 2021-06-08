@@ -31,7 +31,7 @@ public interface TransportOrderService extends BaseService<TransportOrder, Long>
      * @return
      * @throws Exception
      */
-    void insertTransport(TransportOrderQuey order)throws Exception;
+    TransportOrderQuey insertTransport(TransportOrderQuey order)throws Exception;
 
     /**
      * 买卖端-运输单-详情
@@ -66,4 +66,12 @@ public interface TransportOrderService extends BaseService<TransportOrder, Long>
      * @return
      */
     int confirmTransportOrder(TransportOrder order)throws Exception;
+
+    /**
+     * 订单失效处理
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    int orderFailure(String id)throws Exception;
 }

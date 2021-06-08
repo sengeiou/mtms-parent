@@ -4,8 +4,11 @@ import com.dili.mtms.common.BaseData;
 import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.domain.TransportOrder;
 import com.dili.mtms.dto.TransportOrderQuey;
+import com.dili.mtms.listener.QueueMsgUtil;
 import com.dili.mtms.service.TransportOrderService;
+import com.dili.mtms.utils.DateTimeUtil;
 import com.dili.ss.domain.BaseOutput;
+import com.dili.ss.redis.delayqueue.dto.DelayMessage;
 import com.dili.ss.redis.delayqueue.impl.DistributedRedisDelayQueueImpl;
 import com.dili.uid.sdk.rpc.feign.UidFeignRpc;
 import lombok.extern.slf4j.Slf4j;
@@ -69,7 +72,10 @@ public class TransportOrderApi {
             }else {
                 return BaseOutput.failure("获取订单编号失败");
             }
-            transportOrderService.insertTransport(order);
+            TransportOrderQuey return_order = transportOrderService.insertTransport(order);
+            //订单失效处理(redis队列)
+            DelayMessage delayMessage = QueueMsgUtil.assemblyTransportMsg(return_order);
+            redisDelayQueue.push(delayMessage);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);

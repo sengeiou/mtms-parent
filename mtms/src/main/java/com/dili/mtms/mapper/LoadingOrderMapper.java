@@ -12,9 +12,9 @@ public interface LoadingOrderMapper extends MyMapper<LoadingOrder> {
 
     List<LoadingOrderQuey> loadingList(LoadingOrderQuey order);
 
-    void insertLoading(LoadingOrderQuey order);
+    int insertLoading(LoadingOrderQuey order);
 
-    void insertLoadingItem(@Param("list") List<LoadingOrderItem> list, @Param("id") Long id);
+    int insertLoadingItem(@Param("list") List<LoadingOrderItem> list, @Param("id") Long id);
 
     LoadingOrderQuey loadingDetail(Long id);
 
@@ -29,4 +29,6 @@ public interface LoadingOrderMapper extends MyMapper<LoadingOrder> {
     int loadingComplete(LoadingOrder loadingOrder);
 
     int confirmLoadingOrder(LoadingOrder loadingOrder);
+
+    int orderFailure(String id);
 }

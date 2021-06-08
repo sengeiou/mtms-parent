@@ -12,6 +12,17 @@ import java.util.Date;
 public class DateTimeUtil {
 
     /**
+     * 时间毫秒转换
+     * @param time
+     * @return
+     */
+    public static Long msConversion(String time) throws ParseException {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = sf.parse(time.trim());
+        return date.getTime();
+    }
+
+    /**
      * 开始时间转换
      * @param time
      * @return

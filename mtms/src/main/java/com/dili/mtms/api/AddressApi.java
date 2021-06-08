@@ -1,5 +1,6 @@
 package com.dili.mtms.api;
 
+import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.domain.Address;
 import com.dili.mtms.service.AddressService;
 import com.dili.ss.domain.BaseOutput;
@@ -21,7 +22,7 @@ public class AddressApi {
 
 
     /**
-     * 分页查询Address，返回easyui分页信息
+     * 分页查询Address
      * @param address
      * @return String
      * @throws Exception
@@ -33,7 +34,7 @@ public class AddressApi {
             list = addressService.listEasyuiPageByExample(address, true).getRows();
         }catch (Exception e){
             log.error(e.getMessage(),e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success("查询成功").setData(list);
     }
@@ -49,7 +50,7 @@ public class AddressApi {
             addressService.insertSelective(address);
         }catch (Exception e){
             log.error(e.getMessage(),e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success("新增成功");
     }
@@ -63,10 +64,9 @@ public class AddressApi {
     public @ResponseBody BaseOutput update(Address address) {
         try {
             addressService.updateSelective(address);
-
         }catch (Exception e){
             log.error(e.getMessage(),e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success("修改成功");
     }
@@ -82,7 +82,7 @@ public class AddressApi {
             addressService.delete(address.getId());
         }catch (Exception e){
             log.error(e.getMessage(),e);
-            return BaseOutput.failure();
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success("删除成功");
     }

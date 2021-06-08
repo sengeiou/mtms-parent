@@ -4,8 +4,11 @@ import com.dili.mtms.common.BaseData;
 import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.domain.LoadingOrder;
 import com.dili.mtms.dto.LoadingOrderQuey;
+import com.dili.mtms.listener.QueueMsgUtil;
 import com.dili.mtms.service.LoadingOrderService;
 import com.dili.ss.domain.BaseOutput;
+import com.dili.ss.redis.delayqueue.dto.DelayMessage;
+import com.dili.ss.redis.delayqueue.impl.DistributedRedisDelayQueueImpl;
 import com.dili.uid.sdk.rpc.feign.UidFeignRpc;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.C;
@@ -25,6 +28,10 @@ public class LoadingOrderApi {
 
     @Autowired
     UidFeignRpc uidFeignRpc;
+
+    //多实例延时队列
+    @Autowired
+    DistributedRedisDelayQueueImpl redisDelayQueue;
 
     /**
      * 买卖端装卸列表
@@ -78,7 +85,10 @@ public class LoadingOrderApi {
             }else {
                 return BaseOutput.failure("获取订单编号失败");
             }
-            loadingOrderService.insertLoading(order);
+            LoadingOrderQuey return_order = loadingOrderService.insertLoading(order);
+            //订单失效处理(redis队列)
+            DelayMessage delayMessage = QueueMsgUtil.assemblyLoadingMsg(return_order);
+            redisDelayQueue.push(delayMessage);
         }catch (Exception e){
             log.error(e.getMessage(), e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);

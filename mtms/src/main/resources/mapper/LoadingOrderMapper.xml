@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dili.mtms.mapper.LoadingOrderMapper">
 
+    <!--订单失效处理-->
+    <update id="orderFailure" parameterType="java.lang.String">
+        update loading_order s set s.state = 4,s.invalid_time = now() where s.id = #{id} and s.state = 1
+    </update>
+
     <!--确认接单 -->
     <update id="confirmLoadingOrder" parameterType="com.dili.mtms.domain.LoadingOrder">
         update loading_order s

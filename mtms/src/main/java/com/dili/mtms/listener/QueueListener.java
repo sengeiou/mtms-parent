@@ -1,9 +1,13 @@
 package com.dili.mtms.listener;
 
+import com.dili.mtms.service.LoadingOrderService;
+import com.dili.mtms.service.TransportOrderService;
 import com.dili.ss.redis.delayqueue.annotation.StreamListener;
 import com.dili.ss.redis.delayqueue.dto.DelayMessage;
 import com.dili.ss.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -16,6 +20,12 @@ import java.util.Date;
 @Component
 public class QueueListener {
 
+    @Autowired
+    TransportOrderService transportOrderService;
+
+    @Autowired
+    LoadingOrderService loadingOrderService;
+
     /**
      * 监听失效运输单
      * @param message
@@ -23,6 +33,14 @@ public class QueueListener {
     @StreamListener("invalidTransportOrderTopic")
     public void listenerInvalidTransportOrder(DelayMessage message){
         log.info(DateUtils.format(new Date())+",延时队列接收到消息:"+message.getBody());
+        try {
+            if(StringUtils.isNotBlank(message.getBody())){
+                //如果订单状态为已创建则失效
+                int i = transportOrderService.orderFailure(message.getBody());
+            }
+        }catch (Exception e){
+            log.error(DateUtils.format(new Date())+",运输单队列消息消费异常:"+e.getMessage());
+        }
     }
 
     /**
@@ -32,19 +50,13 @@ public class QueueListener {
     @StreamListener("invalidLoadingOrderTopic")
     public void listenerInvalidLoadingOrder(DelayMessage message){
         log.info(DateUtils.format(new Date())+",延时队列接收到消息:"+message.getBody());
+        try {
+            if(StringUtils.isNotBlank(message.getBody())){
+                //如果订单状态为已创建则失效
+                int i = loadingOrderService.orderFailure(message.getBody());
+            }
+        }catch (Exception e){
+            log.error(DateUtils.format(new Date())+",装卸单队列消息消费异常:"+e.getMessage());
+        }
     }
-
-    /*//发送消息
-        DelayMessage delayMessage = DTOUtils.newInstance(DelayMessage.class);
-// 消息topic
-        delayMessage.setTopic("invalidTransportOrderTopic");
-        delayMessage.setBody("消息内容JSON");
-//延时到指定时间点(优先于DelayDuration生效)
-        delayMessage.setDelayTime(System.currentTimeMillis()+5000L);
-//当前时间往后延时秒数
-//        delayMessage.setDelayDuration(30L);
-//消息发送时间
-        delayMessage.setCreateTime(LocalDateTime.now());
-//向延时队列投递消息
-        redisDelayQueue.push(delayMessage);*/
 }

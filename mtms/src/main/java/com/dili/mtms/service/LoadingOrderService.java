@@ -23,7 +23,7 @@ public interface LoadingOrderService extends BaseService<LoadingOrder, Long> {
      * @return
      * @throws Exception
      */
-    void insertLoading(LoadingOrderQuey order)throws Exception;
+    LoadingOrderQuey insertLoading(LoadingOrderQuey order)throws Exception;
 
     /**
      * 删除订单
@@ -68,4 +68,12 @@ public interface LoadingOrderService extends BaseService<LoadingOrder, Long> {
      * @return
      */
     int confirmLoadingOrder(LoadingOrder loadingOrder)throws Exception;
+
+    /**
+     * 订单失效处理
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    int orderFailure(String id)throws Exception;
 }

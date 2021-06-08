@@ -61,7 +61,7 @@ public class LoadingOrderServiceImpl extends BaseServiceImpl<LoadingOrder, Long>
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void insertLoading(LoadingOrderQuey order) throws Exception {
+    public LoadingOrderQuey insertLoading(LoadingOrderQuey order) throws Exception {
         //订单项数据处理
         List<LoadingOrderItem> list = JSONArray.parseArray(order.getOrderItem(), LoadingOrderItem.class);
         for(LoadingOrderItem item:list){
@@ -71,6 +71,7 @@ public class LoadingOrderServiceImpl extends BaseServiceImpl<LoadingOrder, Long>
         }
         loadingOrderMapper.insertLoading(order);
         loadingOrderMapper.insertLoadingItem(list,order.getId());
+        return order;
     }
 
     /**
@@ -152,5 +153,17 @@ public class LoadingOrderServiceImpl extends BaseServiceImpl<LoadingOrder, Long>
     @Override
     public int confirmLoadingOrder(LoadingOrder loadingOrder) throws Exception {
         return loadingOrderMapper.confirmLoadingOrder(loadingOrder);
+    }
+
+    /**
+     * 订单失效处理
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int orderFailure(String id) throws Exception {
+        return loadingOrderMapper.orderFailure(id);
     }
 }

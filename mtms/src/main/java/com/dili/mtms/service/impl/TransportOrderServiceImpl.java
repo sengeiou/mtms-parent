@@ -79,7 +79,7 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void insertTransport(TransportOrderQuey order) throws Exception {
+    public TransportOrderQuey insertTransport(TransportOrderQuey order) throws Exception {
         //订单项数据处理
         List<TransportOrderItem> list = JSONArray.parseArray(order.getOrderItem(),TransportOrderItem.class);
         for(TransportOrderItem item:list){
@@ -89,6 +89,7 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
         }
         mapper.insertTransport(order);
         mapper.insertTransportItem(list,order.getId());
+        return order;
     }
 
     /**
@@ -151,6 +152,18 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
     @Override
     public int confirmTransportOrder(TransportOrder order) throws Exception {
         return mapper.confirmTransportOrder(order);
+    }
+
+    /**
+     * 订单失效处理
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int orderFailure(String id) throws Exception {
+        return mapper.orderFailure(id);
     }
 
 }
