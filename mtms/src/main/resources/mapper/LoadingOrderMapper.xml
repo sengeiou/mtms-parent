@@ -94,6 +94,7 @@
         SELECT
             s.id,
             s.code,
+            s.shipper_id,
             s.shipper_name,
             s.shipper_cellphone,
             s.taker_name,
@@ -119,6 +120,7 @@
     <resultMap id="LoadingDetail" type="com.dili.mtms.dto.LoadingOrderQuey">
         <id column="id" property="id"/>
         <result column="code" property="code"/>
+        <result column="shipper_id" property="shipperId"/>
         <result column="shipper_name" property="shipperName"/>
         <result column="shipper_cellphone" property="shipperCellphone"/>
         <result column="taker_name" property="takerName"/>
@@ -152,6 +154,7 @@
     <!-- 买卖端-装卸-新增loading-->
     <insert id="insertLoading" useGeneratedKeys="true" keyProperty="id" parameterType="com.dili.mtms.dto.LoadingOrderQuey">
         insert into loading_order(code,
+                                  shipper_id,
                                   shipper_name,
                                   shipper_cellphone,
                                   address,
@@ -164,6 +167,7 @@
                                   state,
                                   create_time
         ) values (#{code},
+                  #{shipperId},
                   #{shipperName},
                   #{shipperCellphone},
                   #{address},

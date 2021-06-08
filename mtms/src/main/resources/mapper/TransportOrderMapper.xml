@@ -50,6 +50,7 @@
     <select id="transportDetail" parameterType="java.lang.Long" resultMap="TransportDetail">
         SELECT
             s.id,
+            s.shipper_id,
             s.shipper_name,
             s.shipper_cellphone,
             s.shipper_address,
@@ -79,6 +80,7 @@
     </select>
     <resultMap id="TransportDetail" type="com.dili.mtms.dto.TransportOrderQuey">
         <id column="id" property="id"/>
+        <result column="shipper_id" property="shipperId"/>
         <result column="shipper_name" property="shipperName"/>
         <result column="shipper_cellphone" property="shipperCellphone"/>
         <result column="shipper_address" property="shipperAddress"/>
@@ -119,6 +121,7 @@
   <insert id="insertTransport" useGeneratedKeys="true" keyProperty="id"
           parameterType="com.dili.mtms.dto.TransportOrderQuey">
      insert into transport_order(code,
+                                 shipper_id,
                                  shipper_name,
                                  shipper_cellphone,
                                  shipper_address,
@@ -134,6 +137,7 @@
                                  notes,
                                  create_time
      ) values (#{code},
+               #{shipperId},
                #{shipperName},
                #{shipperCellphone},
                #{shipperAddress},
