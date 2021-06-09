@@ -1,7 +1,5 @@
 package com.dili.mtms.listener;
 
-import com.dili.mtms.domain.LoadingOrder;
-import com.dili.mtms.domain.TransportOrder;
 import com.dili.mtms.dto.LoadingOrderQuey;
 import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.ss.dto.DTOUtils;
@@ -24,7 +22,7 @@ public class QueueMsgUtil {
         delayMessage.setTopic("invalidTransportOrderTopic");
         delayMessage.setBody(String.valueOf(order.getId()));
         //延时到指定时间点(优先于DelayDuration生效)
-        Long validTime = order.getServiceTime().getTime()-System.currentTimeMillis();
+        Long validTime = order.getServiceTime().getTime();
         delayMessage.setDelayTime(validTime);
         //当前时间往后延时秒数
         //delayMessage.setDelayDuration(30L);
@@ -44,7 +42,7 @@ public class QueueMsgUtil {
         delayMessage.setTopic("invalidLoadingOrderTopic");
         delayMessage.setBody(String.valueOf(order.getId()));
         //延时到指定时间点(优先于DelayDuration生效)
-        Long validTime = order.getServiceTime().getTime()-System.currentTimeMillis();
+        Long validTime = order.getServiceTime().getTime();
         delayMessage.setDelayTime(validTime);
         //当前时间往后延时秒数
         //delayMessage.setDelayDuration(30L);

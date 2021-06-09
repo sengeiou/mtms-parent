@@ -1,5 +1,6 @@
 package com.dili.mtms.api;
 
+import com.dili.mtms.common.BaseData;
 import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.domain.Address;
 import com.dili.mtms.service.AddressService;
@@ -29,14 +30,14 @@ public class AddressApi {
      */
     @PostMapping(value="/listPage")
     public @ResponseBody BaseOutput listPage(Address address) throws Exception {
-        List list = null;
+        BaseData data = null;
         try {
-            list = addressService.listEasyuiPageByExample(address, true).getRows();
+            data = addressService.listAddress(address);
         }catch (Exception e){
             log.error(e.getMessage(),e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
-        return BaseOutput.success("查询成功").setData(list);
+        return BaseOutput.success().setData(data);
     }
 
     /**
@@ -47,7 +48,7 @@ public class AddressApi {
     @PostMapping(value="/insert")
     public @ResponseBody BaseOutput insert(Address address) {
         try {
-            addressService.insertSelective(address);
+            int i = addressService.insertAddress(address);
         }catch (Exception e){
             log.error(e.getMessage(),e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
@@ -63,7 +64,11 @@ public class AddressApi {
     @PostMapping(value="/update")
     public @ResponseBody BaseOutput update(Address address) {
         try {
-            addressService.updateSelective(address);
+            int i = addressService.updateSelective(address);
+            //默认地址唯一
+            if(i>0 && address.getIsDefault() != null && address.getCustomerId() != null){
+                    addressService.updateIsdefaultAddress(address);
+            }
         }catch (Exception e){
             log.error(e.getMessage(),e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
@@ -85,5 +90,22 @@ public class AddressApi {
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
         return BaseOutput.success("删除成功");
+    }
+
+    /**
+     * 获取默认地址
+     * @param address
+     * @return
+     */
+    @PostMapping(value="/getDefaultAddress")
+    public @ResponseBody BaseOutput getDefaultAddress(Address address) {
+        Address retrun_address = null;
+        try {
+            retrun_address = addressService.getDefaultAddress(address);
+        }catch (Exception e){
+            log.error(e.getMessage(),e);
+            return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
+        }
+        return BaseOutput.success().setData(retrun_address);
     }
 }
