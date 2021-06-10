@@ -193,6 +193,10 @@
               i.total_weight
        from loading_order l left join loading_order_item i on l.id = i.loading_order_id
        where l.firm_id = #{firmId}
+      <if test="status == null">
+          AND l.shipper_id = #{shipperId}
+      </if>
+
       <if test="status != null and status == 1 ">
           AND l.state = 1
       </if>
@@ -200,7 +204,7 @@
       <if test="status != null and status == 2 ">
           AND l.state = 2 or l.state = 3
       </if>
-          order by l.create_time desc
+          order by l.state asc,l.create_time desc
   </select>
   <resultMap id="LoadingOrder" type="com.dili.mtms.dto.LoadingOrderQuey">
     <id column="id" property="id"/>

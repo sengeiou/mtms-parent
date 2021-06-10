@@ -4,8 +4,10 @@ import com.dili.mtms.common.BaseData;
 import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.domain.Address;
 import com.dili.mtms.service.AddressService;
+import com.dili.ss.constant.ResultCode;
 import com.dili.ss.domain.BaseOutput;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +31,13 @@ public class AddressApi {
      * @throws Exception
      */
     @PostMapping(value="/listPage")
-    public @ResponseBody BaseOutput listPage(Address address) throws Exception {
+    public @ResponseBody BaseOutput listPage(Address address) {
         BaseData data = null;
         try {
+            //参数验证
+            if(address.getFirmId() == null || address.getCustomerId() == null){
+                return BaseOutput.create(ResultCode.DATA_ERROR,"缺少必要参数");
+            }
             data = addressService.listAddress(address);
         }catch (Exception e){
             log.error(e.getMessage(),e);
@@ -48,12 +54,16 @@ public class AddressApi {
     @PostMapping(value="/insert")
     public @ResponseBody BaseOutput insert(Address address) {
         try {
+            //参数验证
+            if(address.getFirmId() == null || address.getCustomerId() == null){
+                return BaseOutput.create(ResultCode.DATA_ERROR,"缺少必要参数");
+            }
             int i = addressService.insertAddress(address);
         }catch (Exception e){
             log.error(e.getMessage(),e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
-        return BaseOutput.success("新增成功");
+        return BaseOutput.success();
     }
 
     /**
@@ -69,11 +79,15 @@ public class AddressApi {
             if(i>0 && address.getIsDefault() != null && address.getCustomerId() != null){
                     addressService.updateIsdefaultAddress(address);
             }
+            //地址修改失败
+            if(i<1){
+                return BaseOutput.create(ResultCode.DATA_ERROR,"修改失败");
+            }
         }catch (Exception e){
             log.error(e.getMessage(),e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
-        return BaseOutput.success("修改成功");
+        return BaseOutput.success();
     }
 
     /**
@@ -84,7 +98,10 @@ public class AddressApi {
     @PostMapping(value="/delete")
     public @ResponseBody BaseOutput delete(Address address) {
         try {
-            addressService.delete(address.getId());
+            int i = addressService.delete(address.getId());
+            if(i<1){
+                return BaseOutput.create(ResultCode.DATA_ERROR,"删除失败");
+            }
         }catch (Exception e){
             log.error(e.getMessage(),e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);

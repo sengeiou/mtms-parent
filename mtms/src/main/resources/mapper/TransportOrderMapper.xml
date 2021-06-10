@@ -67,6 +67,10 @@
             s.taker_name,
             s.taker_cellphone,
             s.take_time,
+               s.cancel_time,
+               s.invalid_time,
+               s.complete_time,
+               s.close_time,
             s.create_time,
             t.unit_weight,
             t.number,
@@ -97,6 +101,10 @@
         <result column="taker_name" property="takerName"/>
         <result column="taker_cellphone" property="takerCellphone"/>
         <result column="take_time" property="takeTime"/>
+        <result column="cancel_time" property="cancelTime"/>
+        <result column="invalid_time" property="invalidTime"/>
+        <result column="complete_time" property="completeTime"/>
+        <result column="close_time" property="closeTime"/>
         <result column="create_time" property="createTime"/>
 
         <collection property="transportItem" ofType="com.dili.mtms.domain.TransportOrderItem"  >
@@ -174,6 +182,10 @@
       transport_order s left join transport_order_item t on s.id = t.transport_order_id
     where
       s.firm_id = #{firmId}
+      <if test="status == null">
+          AND s.shipper_id = #{shipperId}
+      </if>
+
       <if test="status != null and status == 1 ">
           AND s.state = 1
       </if>
@@ -181,7 +193,7 @@
       <if test="status != null and status == 2 ">
           AND s.state = 2 or s.state = 3
       </if>
-    order by s.create_time desc
+    order by s.state asc,s.create_time desc
   </select>
 
   <resultMap id="Transport" type="com.dili.mtms.dto.TransportOrderQuey">

@@ -1,11 +1,15 @@
 package com.dili.mtms.api;
 
+import com.dili.customer.sdk.domain.Customer;
+import com.dili.customer.sdk.domain.dto.CustomerExtendDto;
+import com.dili.customer.sdk.rpc.CustomerRpc;
 import com.dili.mtms.common.BaseData;
 import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.domain.LoadingOrder;
 import com.dili.mtms.dto.LoadingOrderQuey;
 import com.dili.mtms.listener.QueueMsgUtil;
 import com.dili.mtms.service.LoadingOrderService;
+import com.dili.ss.constant.ResultCode;
 import com.dili.ss.domain.BaseOutput;
 import com.dili.ss.redis.delayqueue.dto.DelayMessage;
 import com.dili.ss.redis.delayqueue.impl.DistributedRedisDelayQueueImpl;
@@ -32,6 +36,9 @@ public class LoadingOrderApi {
     //多实例延时队列
     @Autowired
     DistributedRedisDelayQueueImpl redisDelayQueue;
+
+    @Autowired
+    private CustomerRpc customerRpc;
 
     /**
      * 买卖端装卸列表
@@ -105,6 +112,9 @@ public class LoadingOrderApi {
     public @ResponseBody BaseOutput loadingCancel(LoadingOrder loadingOrder) {
         try {
             int i = loadingOrderService.loadingCancel(loadingOrder);
+            if (i == 0){
+                return BaseOutput.create(ResultCode.DATA_ERROR,"订单已取消");
+            }
         }catch (Exception e){
             log.error(e.getMessage(), e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
@@ -120,7 +130,21 @@ public class LoadingOrderApi {
     @PostMapping(value="/confirmOrder")
     public @ResponseBody BaseOutput confirmLoadingOrder(LoadingOrder loadingOrder) {
         try {
+            //判断用户状态
+            CustomerExtendDto customer = customerRpc.get(loadingOrder.getShipperId(),loadingOrder.getFirmId()).getData();
+            if(customer != null && customer.getCustomerMarket() != null){
+                Integer userStatus = customer.getCustomerMarket().getState();
+                if(userStatus == 0){
+                    return BaseOutput.create(ResultCode.DATA_ERROR,"用户已注销");
+                }else if(userStatus == 2){
+                    return BaseOutput.create(ResultCode.DATA_ERROR,"用户已禁用");
+                }
+            }
+
             int i = loadingOrderService.confirmLoadingOrder(loadingOrder);
+            if (i == 0){
+                return BaseOutput.create(ResultCode.DATA_ERROR,"订单已被其它司机接单");
+            }
         }catch (Exception e){
             log.error(e.getMessage(), e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
@@ -137,6 +161,9 @@ public class LoadingOrderApi {
     public @ResponseBody BaseOutput loadingComplete(LoadingOrder loadingOrder) {
         try {
             int i = loadingOrderService.loadingComplete(loadingOrder);
+            if (i == 0){
+                return BaseOutput.create(ResultCode.DATA_ERROR,"订单已确认");
+            }
         }catch (Exception e){
             log.error(e.getMessage(), e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);

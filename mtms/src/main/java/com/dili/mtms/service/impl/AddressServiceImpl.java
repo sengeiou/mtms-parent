@@ -40,7 +40,7 @@ public class AddressServiceImpl extends BaseServiceImpl<Address, Long> implement
          if(i>0 && address.getIsDefault() != null && address.getCustomerId() != null){
              addressMapper.updateIsdefaultAddress(address);
          }
-        return 1;
+        return i;
     }
 
     /**

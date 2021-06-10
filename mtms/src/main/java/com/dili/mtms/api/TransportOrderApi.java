@@ -1,5 +1,7 @@
 package com.dili.mtms.api;
 
+import com.dili.customer.sdk.domain.dto.CustomerExtendDto;
+import com.dili.customer.sdk.rpc.CustomerRpc;
 import com.dili.mtms.common.BaseData;
 import com.dili.mtms.common.CfgContent;
 import com.dili.mtms.domain.TransportOrder;
@@ -7,6 +9,7 @@ import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.mtms.listener.QueueMsgUtil;
 import com.dili.mtms.service.TransportOrderService;
 import com.dili.mtms.utils.DateTimeUtil;
+import com.dili.ss.constant.ResultCode;
 import com.dili.ss.domain.BaseOutput;
 import com.dili.ss.redis.delayqueue.dto.DelayMessage;
 import com.dili.ss.redis.delayqueue.impl.DistributedRedisDelayQueueImpl;
@@ -30,9 +33,11 @@ public class TransportOrderApi {
     @Autowired
     UidFeignRpc uidFeignRpc;
 
-    //多实例延时队列
     @Autowired
     DistributedRedisDelayQueueImpl redisDelayQueue;
+
+    @Autowired
+    private CustomerRpc customerRpc;
 
     /**
      * 买卖端运输单列表
@@ -112,8 +117,8 @@ public class TransportOrderApi {
     public @ResponseBody BaseOutput transportCancel(TransportOrder order) {
         try {
             int i = transportOrderService.transportCancel(order);
-            if (i<1){
-                return BaseOutput.failure("订单取消失败");
+            if (i == 0){
+                return BaseOutput.create(ResultCode.DATA_ERROR,"订单已取消");
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -132,7 +137,21 @@ public class TransportOrderApi {
     public @ResponseBody
     BaseOutput confirmTransportOrder(TransportOrder order) {
         try {
+            //判断用户状态
+            CustomerExtendDto customer = customerRpc.get(order.getShipperId(),order.getFirmId()).getData();
+            if(customer != null && customer.getCustomerMarket() != null){
+                Integer userStatus = customer.getCustomerMarket().getState();
+                if(userStatus == 0){
+                    return BaseOutput.create(ResultCode.DATA_ERROR,"用户已注销");
+                }else if(userStatus == 2){
+                    return BaseOutput.create(ResultCode.DATA_ERROR,"用户已禁用");
+                }
+            }
+
             int i = transportOrderService.confirmTransportOrder(order);
+            if (i == 0){
+                return BaseOutput.create(ResultCode.DATA_ERROR,"订单已被其它司机接单");
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
@@ -151,6 +170,9 @@ public class TransportOrderApi {
     BaseOutput transportComplete(TransportOrder order) {
         try {
             int i = transportOrderService.transportComplete(order);
+            if (i == 0){
+                return BaseOutput.create(ResultCode.DATA_ERROR,"订单已确认");
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
@@ -168,8 +190,8 @@ public class TransportOrderApi {
     public @ResponseBody BaseOutput deleteTransporOrder(TransportOrder order) {
         try {
             int i = transportOrderService.deleteTransporOrder(order);
-            if(i<1){
-                return BaseOutput.failure("订单删除失败");
+            if (i == 0){
+                return BaseOutput.create(ResultCode.DATA_ERROR,"订单已删除");
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
