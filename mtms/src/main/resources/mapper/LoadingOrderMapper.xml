@@ -102,6 +102,7 @@
             s.offer,
             s.state,
             s.address,
+            s.shipper_address_id,
             s.service_time,
             s.service_type,
             s.create_time,
@@ -128,6 +129,7 @@
         <result column="offer" property="offer"/>
         <result column="state" property="state"/>
         <result column="address" property="address"/>
+        <result column="shipper_address_id" property="shipperAddressId"/>
         <result column="service_time" property="serviceTime"/>
         <result column="service_type" property="serviceType"/>
         <result column="create_time" property="createTime"/>

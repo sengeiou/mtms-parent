@@ -51,9 +51,11 @@
         SELECT
             s.id,
             s.shipper_id,
+            s.shipper_address_id,
             s.shipper_name,
             s.shipper_cellphone,
             s.shipper_address,
+            s.delivery_address_id,
             s.delivery_name,
             s.delivery_cellphone,
             s.delivery_address,
@@ -67,10 +69,10 @@
             s.taker_name,
             s.taker_cellphone,
             s.take_time,
-               s.cancel_time,
-               s.invalid_time,
-               s.complete_time,
-               s.close_time,
+            s.cancel_time,
+            s.invalid_time,
+            s.complete_time,
+            s.close_time,
             s.create_time,
             t.unit_weight,
             t.number,
@@ -85,9 +87,11 @@
     <resultMap id="TransportDetail" type="com.dili.mtms.dto.TransportOrderQuey">
         <id column="id" property="id"/>
         <result column="shipper_id" property="shipperId"/>
+        <result column="shipper_address_id" property="shipperAddressId"/>
         <result column="shipper_name" property="shipperName"/>
         <result column="shipper_cellphone" property="shipperCellphone"/>
         <result column="shipper_address" property="shipperAddress"/>
+        <result column="delivery_address_id" property="deliveryAddressId"/>
         <result column="delivery_name" property="deliveryName"/>
         <result column="delivery_cellphone" property="deliveryCellphone"/>
         <result column="delivery_address" property="deliveryAddress"/>

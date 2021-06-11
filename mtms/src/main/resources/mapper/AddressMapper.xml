@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dili.mtms.mapper.AddressMapper">
 
+  <select id="getAdressInfo" resultType="com.dili.mtms.domain.Address">
+      select
+          id,
+          gender
+      from address
+      where id in (#{shipperAddressId},#{deliveryAddressId})
+  </select>
+
   <select id="listAddress" parameterType="com.dili.mtms.domain.Address" resultType="com.dili.mtms.domain.Address">
       select
           a.id,

@@ -78,4 +78,16 @@ public class AddressServiceImpl extends BaseServiceImpl<Address, Long> implement
         baseData.setRows(list);
         return baseData;
     }
+
+    /**
+     * 根据id获取地址信息
+     * @param shipperAddressId
+     * @param deliveryAddressId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<Address> getAdressInfo(Long shipperAddressId, Long deliveryAddressId) throws Exception {
+        return addressMapper.getAdressInfo(shipperAddressId,deliveryAddressId);
+    }
 }

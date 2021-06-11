@@ -70,11 +70,11 @@ public interface TransportOrder extends IBaseDomain {
     void setShipperAddress(String shipperAddress);
 
     @Column(name = "`delivery_address_id`")
-    @FieldDef(label="收货地址id", maxLength = 60)
+    @FieldDef(label="收货地址id", maxLength = 20)
     @EditMode(editor = FieldEditor.Text, required = false)
-    String getDeliveryAddressId();
+    Long getDeliveryAddressId();
 
-    void setDeliveryAddressId(String deliveryAddressId);
+    void setDeliveryAddressId(Long deliveryAddressId);
 
     @Column(name = "`delivery_name`")
     @FieldDef(label="收货人姓名", maxLength = 20)

@@ -4,20 +4,22 @@ import com.dili.customer.sdk.domain.dto.CustomerExtendDto;
 import com.dili.customer.sdk.rpc.CustomerRpc;
 import com.dili.mtms.common.BaseData;
 import com.dili.mtms.common.CfgContent;
+import com.dili.mtms.domain.Address;
 import com.dili.mtms.domain.TransportOrder;
 import com.dili.mtms.dto.TransportOrderQuey;
 import com.dili.mtms.listener.QueueMsgUtil;
+import com.dili.mtms.service.AddressService;
 import com.dili.mtms.service.TransportOrderService;
-import com.dili.mtms.utils.DateTimeUtil;
 import com.dili.ss.constant.ResultCode;
 import com.dili.ss.domain.BaseOutput;
 import com.dili.ss.redis.delayqueue.dto.DelayMessage;
 import com.dili.ss.redis.delayqueue.impl.DistributedRedisDelayQueueImpl;
 import com.dili.uid.sdk.rpc.feign.UidFeignRpc;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 运输单管理
@@ -38,6 +40,9 @@ public class TransportOrderApi {
 
     @Autowired
     private CustomerRpc customerRpc;
+
+    @Autowired
+    AddressService addressService;
 
     /**
      * 买卖端运输单列表
@@ -97,14 +102,28 @@ public class TransportOrderApi {
     @PostMapping(value = "/detail")
     public @ResponseBody
     BaseOutput transportDetail(TransportOrderQuey order) {
-        TransportOrderQuey detailInfo = null;
+        TransportOrderQuey info = null;
         try {
-            detailInfo = transportOrderService.transportDetail(order);
+            info = transportOrderService.transportDetail(order);
+            //封装性别
+            if(info.getShipperAddressId() != null && info.getDeliveryAddressId() != null){
+                List<Address> addressList = addressService.getAdressInfo(info.getShipperAddressId(),info.getDeliveryAddressId());
+                if(addressList.size()>0){
+                   for(Address list:addressList){
+                       if(info.getShipperAddressId().equals(list.getId())){
+                           info.setShipperSex(list.getGender());
+                       }
+                       if(info.getDeliveryAddressId().equals(list.getId())){
+                           info.setDeliverySex(list.getGender());
+                       }
+                   }
+                }
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
-        return BaseOutput.success().setData(detailInfo);
+        return BaseOutput.success().setData(info);
     }
 
     /**
@@ -189,10 +208,7 @@ public class TransportOrderApi {
     @PostMapping(value = "/delete")
     public @ResponseBody BaseOutput deleteTransporOrder(TransportOrder order) {
         try {
-            int i = transportOrderService.deleteTransporOrder(order);
-            if (i == 0){
-                return BaseOutput.create(ResultCode.DATA_ERROR,"订单已删除");
-            }
+            transportOrderService.deleteTransporOrder(order);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);

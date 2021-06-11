@@ -28,6 +28,11 @@ public class CfgContent {
     public static final String SYSTEM_EXCEPTION = "系统异常";
 
     /**
+     * 缺少参数
+     */
+    public static final String LACK_PARAM = "缺少参数";
+
+    /**
      * 运输订单编号
      */
     public static final String TRANSPORT_NO = "zxwl_transportOrderNo";

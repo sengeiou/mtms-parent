@@ -44,7 +44,7 @@ public interface TransportOrderService extends BaseService<TransportOrder, Long>
      * 买卖段-运输-删除
      * @param order
      */
-    int deleteTransporOrder(TransportOrder order)throws Exception;
+    void deleteTransporOrder(TransportOrder order)throws Exception;
 
     /**
      * 取消运输单

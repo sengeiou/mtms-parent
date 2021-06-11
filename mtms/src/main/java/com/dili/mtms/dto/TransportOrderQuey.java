@@ -11,6 +11,12 @@ import java.util.List;
  */
 public interface TransportOrderQuey extends TransportOrder {
 
+    Byte getShipperSex();
+    void setShipperSex(Byte shipperSex);
+
+    Byte getDeliverySex();
+    void setDeliverySex(Byte deliverySex);
+
 
     Integer getStatus();
     void setStatus(Integer status);

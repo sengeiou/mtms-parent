@@ -13,6 +13,9 @@ import java.util.List;
  */
 public interface LoadingOrderQuey extends LoadingOrder {
 
+    Byte getShipperSex();
+    void setShipperSex(Byte shipperSex);
+
     /**
      * pc端关键字查询
      * @return

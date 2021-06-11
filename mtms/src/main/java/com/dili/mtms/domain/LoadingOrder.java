@@ -41,6 +41,13 @@ public interface LoadingOrder extends IBaseDomain {
 
     void setShipperId(Long shipperId);
 
+    @Column(name = "`shipper_address_id`")
+    @FieldDef(label="发货地址id")
+    @EditMode(editor = FieldEditor.Number, required = false)
+    Long getShipperAddressId();
+
+    void setShipperAddressId(Long shipperAddressId);
+
     @Column(name = "`shipper_name`")
     @FieldDef(label="发货人姓名", maxLength = 10)
     @EditMode(editor = FieldEditor.Text, required = false)

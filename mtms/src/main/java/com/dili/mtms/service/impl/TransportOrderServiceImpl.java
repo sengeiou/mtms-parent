@@ -109,13 +109,9 @@ public class TransportOrderServiceImpl extends BaseServiceImpl<TransportOrder, L
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int deleteTransporOrder(TransportOrder order) throws Exception {
-        int i = mapper.deleteTransporOrder(order);
-        if(i>0){
-            return mapper.deleteTransporOrderItem(order);
-        }
-        return 0;
-
+    public void deleteTransporOrder(TransportOrder order) throws Exception {
+         mapper.deleteTransporOrder(order);
+         mapper.deleteTransporOrderItem(order);
     }
 
     /**

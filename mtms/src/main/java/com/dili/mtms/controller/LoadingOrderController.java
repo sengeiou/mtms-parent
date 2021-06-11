@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * This file was generated on 2021-05-20 17:20:00.
  */
 @RestController
-@RequestMapping("/loadingOrder")
+@RequestMapping("/api/loadingOrder")
 @Slf4j
 public class LoadingOrderController {
     @Autowired

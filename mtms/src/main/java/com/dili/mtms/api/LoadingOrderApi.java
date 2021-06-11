@@ -1,13 +1,14 @@
 package com.dili.mtms.api;
 
-import com.dili.customer.sdk.domain.Customer;
 import com.dili.customer.sdk.domain.dto.CustomerExtendDto;
 import com.dili.customer.sdk.rpc.CustomerRpc;
 import com.dili.mtms.common.BaseData;
 import com.dili.mtms.common.CfgContent;
+import com.dili.mtms.domain.Address;
 import com.dili.mtms.domain.LoadingOrder;
 import com.dili.mtms.dto.LoadingOrderQuey;
 import com.dili.mtms.listener.QueueMsgUtil;
+import com.dili.mtms.service.AddressService;
 import com.dili.mtms.service.LoadingOrderService;
 import com.dili.ss.constant.ResultCode;
 import com.dili.ss.domain.BaseOutput;
@@ -15,9 +16,10 @@ import com.dili.ss.redis.delayqueue.dto.DelayMessage;
 import com.dili.ss.redis.delayqueue.impl.DistributedRedisDelayQueueImpl;
 import com.dili.uid.sdk.rpc.feign.UidFeignRpc;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 装卸单管理
@@ -39,6 +41,9 @@ public class LoadingOrderApi {
 
     @Autowired
     private CustomerRpc customerRpc;
+
+    @Autowired
+    AddressService addressService;
 
     /**
      * 买卖端装卸列表
@@ -65,14 +70,25 @@ public class LoadingOrderApi {
      */
     @PostMapping(value = "/detail")
     public @ResponseBody BaseOutput loadingDetail(LoadingOrderQuey order) {
-        LoadingOrderQuey detailInfo = null;
+        LoadingOrderQuey info = null;
         try {
-            detailInfo = loadingOrderService.loadingDetail(order);
+            info = loadingOrderService.loadingDetail(order);
+            //封装性别
+            if(info.getShipperAddressId() != null){
+                List<Address> addressList = addressService.getAdressInfo(info.getShipperAddressId(),null);
+                if(addressList.size()>0){
+                    for (Address list:addressList){
+                        if (info.getShipperAddressId().equals(list.getId())){
+                            info.setShipperSex(list.getGender());
+                        }
+                    }
+                }
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return BaseOutput.failure(CfgContent.SYSTEM_EXCEPTION);
         }
-        return BaseOutput.success().setData(detailInfo);
+        return BaseOutput.success().setData(info);
     }
 
 

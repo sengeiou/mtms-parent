@@ -4,6 +4,8 @@ import com.dili.mtms.common.BaseData;
 import com.dili.mtms.domain.Address;
 import com.dili.ss.base.BaseService;
 
+import java.util.List;
+
 /**
  * 由MyBatis Generator工具自动生成
  * This file was generated on 2021-05-20 17:20:00.
@@ -37,4 +39,13 @@ public interface AddressService extends BaseService<Address, Long> {
      * @return
      */
     BaseData listAddress(Address address)throws Exception;
+
+    /**
+     * 根据id获取地址信息
+     * @param shipperAddressId
+     * @param deliveryAddressId
+     * @return
+     * @throws Exception
+     */
+    List<Address> getAdressInfo(Long shipperAddressId, Long deliveryAddressId)throws Exception;
 }
