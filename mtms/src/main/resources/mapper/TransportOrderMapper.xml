@@ -133,10 +133,12 @@
   <insert id="insertTransport" useGeneratedKeys="true" keyProperty="id"
           parameterType="com.dili.mtms.dto.TransportOrderQuey">
      insert into transport_order(code,
+                                 shipper_address_id,
                                  shipper_id,
                                  shipper_name,
                                  shipper_cellphone,
                                  shipper_address,
+                                 delivery_address_id,
                                  delivery_name,
                                  delivery_cellphone,
                                  delivery_address,
@@ -149,10 +151,12 @@
                                  notes,
                                  create_time
      ) values (#{code},
+               #{shipperAddressId},
                #{shipperId},
                #{shipperName},
                #{shipperCellphone},
                #{shipperAddress},
+               #{deliveryAddressId},
                #{deliveryName},
                #{deliveryCellphone},
                #{deliveryAddress},

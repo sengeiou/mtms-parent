@@ -166,7 +166,8 @@
                                   notes,
                                   firm_id,
                                   state,
-                                  create_time
+                                  create_time,
+                                  shipper_address_id
         ) values (#{code},
                   #{shipperId},
                   #{shipperName},
@@ -178,7 +179,8 @@
                   #{notes},
                   #{firmId},
                   1,
-                  now()
+                  now(),
+                  #{shipperAddressId}
                  )
     </insert>
   <!-- 买卖端-装卸-列表-->

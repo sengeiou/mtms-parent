@@ -74,6 +74,16 @@ public class TransportOrderApi {
     public @ResponseBody
     BaseOutput insertTransport(@RequestBody TransportOrderQuey order) {
         try {
+            //判断用户状态
+            CustomerExtendDto customer = customerRpc.get(order.getShipperId(),order.getFirmId()).getData();
+            if(customer != null && customer.getCustomerMarket() != null){
+                Integer userStatus = customer.getCustomerMarket().getState();
+                if(userStatus == 0){
+                    return BaseOutput.create(ResultCode.DATA_ERROR,"用户已注销");
+                }else if(userStatus == 2){
+                    return BaseOutput.create(ResultCode.DATA_ERROR,"用户已禁用");
+                }
+            }
             //获取订单号
             BaseOutput<String> bizNumber = uidFeignRpc.getBizNumber(CfgContent.TRANSPORT_NO);
             if (bizNumber.isSuccess()) {
