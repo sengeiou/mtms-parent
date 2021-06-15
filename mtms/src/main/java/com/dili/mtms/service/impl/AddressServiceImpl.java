@@ -37,7 +37,7 @@ public class AddressServiceImpl extends BaseServiceImpl<Address, Long> implement
     public int insertAddress(Address address) throws Exception {
          int i = addressMapper.insertAddress(address);
          //默认地址唯一
-         if(i>0 && address.getIsDefault() != null && address.getCustomerId() != null){
+         if(i>0 && address.getIsDefault() != null && address.getIsDefault() == 1 && address.getCustomerId() != null){
              addressMapper.updateIsdefaultAddress(address);
          }
         return i;

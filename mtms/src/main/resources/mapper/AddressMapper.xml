@@ -48,7 +48,7 @@
   </select>
 
   <update id="updateIsdefaultAddress" parameterType="com.dili.mtms.domain.Address">
-        update address set is_default = 0 where firm_id = #{firmId} and customer_id = #{customerId} and id != #{id}
+        update address set is_default = 2 where customer_id = #{customerId} and id != #{id}
   </update>
 
   <insert id="insertAddress" parameterType="com.dili.mtms.domain.Address" useGeneratedKeys="true" keyProperty="id">

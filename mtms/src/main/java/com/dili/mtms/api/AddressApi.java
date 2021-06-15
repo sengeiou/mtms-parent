@@ -83,7 +83,7 @@ public class AddressApi {
             //修改地址
             int i = addressService.updateSelective(address);
             //默认地址唯一
-            if(i>0 && address.getIsDefault() != null && address.getCustomerId() != null){
+            if(i>0 && address.getIsDefault() != null && address.getIsDefault() == 1 && address.getCustomerId() != null){
                     addressService.updateIsdefaultAddress(address);
             }
         }catch (Exception e){
